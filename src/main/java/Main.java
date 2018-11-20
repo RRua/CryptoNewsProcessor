@@ -7,10 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class Main {
@@ -55,10 +52,13 @@ public class Main {
 
 
     public static WikiPediaProcessor  getWikipediatext( String id) throws Exception {
-        executeCommand("python /Users/ruirua/Documents/PhD_Classes/AIE/work/wiki.py \""+ id + "\"");
+        executeCommand("python -W ignore /Users/ruirua/Documents/PhD_Classes/AIE/work/wiki.py \""+ id + "\"");
         WikiPediaProcessor wp = new WikiPediaProcessor();
+        String newsFile = "/Users/ruirua/Documents/PhD_Classes/AIE/work/wikipediaExtracted/"+id +".txt";
        try{
-           wp.readWordsFromFile("/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/"+id +".txt", tokenSeparator );
+           List <String> l  = executeCommand("python  -W ignore  /Users/ruirua/Documents/PhD_Classes/AIE/work/nltk_example.py "+ newsFile);
+           Contraction c = new Contraction();
+           wp.readWordsFromFile("/Users/ruirua/Documents/PhD_Classes/AIE/work/words.txt", tokenSeparator );
        }catch (FileNotFoundException e){
            System.out.println("Entity not found in WIKIPEDIA ->" + id);
        }
@@ -126,7 +126,7 @@ public class Main {
 
         System.out.println(" Tokenizing ...");
         // Sentence split / tokenization ( using nltk)
-        List <String> l  = executeCommand("python /Users/ruirua/Documents/PhD_Classes/AIE/work/nltk_example.py "+ np.newsPath);
+        List <String> l  = executeCommand("python  -W ignore  /Users/ruirua/Documents/PhD_Classes/AIE/work/nltk_example.py "+ np.newsPath);
         Contraction c = new Contraction();
         np.readWordsFromFile("/Users/ruirua/Documents/PhD_Classes/AIE/work/words.txt", tokenSeparator );
         // np.decontractWordsNews(ner);
@@ -139,7 +139,14 @@ public class Main {
         thread.join();
         np.wordsToPoS(et.returnList, tokenSeparator);
         System.out.println("Processing sentences");
-        int i =0;
+        et = new ExecutorTask(" cat " +np.newsPath + " | /Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit rel pt ");
+        thread = new Thread(et);
+        thread.start();
+        thread.join();
+        for (String s : et.returnList) {
+            np.addRelation(s, "\t");
+        }
+        /*
         for (String sentence : sentences.values()){
             i++;
             System.out.println("    Analysing relations in sentence " +i);
@@ -150,7 +157,8 @@ public class Main {
             for (String s : et.returnList){
                 np.addRelation(s,"\t" );
             }
-            System.out.println("    Analysing sentiment in sentence " +i);
+            System.out.println("     sentiment analysis off");
+           /* System.out.println("    Analysing sentiment in sentence " +i);
             et = new ExecutorTask(" echo \"" + sentence+ "\" | /Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit sent pt ");
             thread = new Thread(et);
             thread.start();
@@ -160,7 +168,8 @@ public class Main {
             }
 
 
-        }
+        }/*
+
 
        /* et = new ExecutorTask("/Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit rel pt " + np.newsPath);
         thread = new Thread(et);
@@ -181,42 +190,53 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not1-mcafee.txt";
-        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not3-Binance.txt";
+        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not1-mcafee.txt";
+        String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not3-Binance.txt";
         //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not4-vulneravel.txt";
-        String onto = "/Users/ruirua/Downloads/cryptocurrency-ontologies-owl-REVISION-HEAD/root-ontology.owl";
-        CurrencyGazeteer cg = new CurrencyGazeteer();
+        //String onto = "/Users/ruirua/Downloads/cryptocurrency-ontologies-owl-REVISION-HEAD/root-ontology.owl";
+        String onto =null;
         BaseKnowledge base = new BaseKnowledge(onto);
         NewsProcessor np = new NewsProcessor();
         np.newsPath = news;
         processNews(np);
         Set<Pair<String,String>> ls = np.getRelevantEntities();
-        List<String> persons = new ArrayList<>();
+        Map<String,String> classifiedEntities = new HashMap<>();
+        List<String> entitiesToClassify = new ArrayList<>();
         for (Pair<String,String> s :ls){
             String type = base.getType(s.getKey(),s.getValue());
             System.out.println("ENTITY -> " + s.getKey()  + "  " + s.getValue()+ " TYPE -> " + type);
+            if (type.equals("Person")|| type.equals("Thing")){
+                entitiesToClassify.add(s.getKey());
+            }
             if (type.equals("Person")){
-                persons.add(s.getKey());
+                classifiedEntities.put(s.getKey(),type);
+            }
+            else {
+                classifiedEntities.putIfAbsent(s.getKey(), type);
             }
         }
         np.wordsIndexList.clear();
-        System.out.println(" WIKI processing persons");
+        System.out.println(" WIKI processing");
+        WikiPediaProcessor [] wa = new WikiPediaProcessor[entitiesToClassify.size()];
+        for (int i = 0; i <entitiesToClassify.size() ; i++) {
+            String entity = entitiesToClassify.get(i);
+            System.out.println("processing " + entity);
+            wa[i] = getWikipediatext(entity);
+            for (Triple<String, String, String> t : wa[i].news_relations_triples){
+                System.out.println(" Wiki triple -> " +t );
+            }
+        }
 
-      /*  WikiPediaProcessor wp = null;
-        for (String person : persons){
-           wp = getWikipediatext(person);
-           for (Triple<String, String, String> t : wp.news_relations_triples){
-               System.out.println(" Wiki triple -> " +t );
-           }
-        }*/
+        RelationFilter rel = new RelationFilter();
+        rel.init(classifiedEntities);
+        for (WikiPediaProcessor wp : wa){
+            rel.filterRelevantRelations(wp,classifiedEntities);
+        }
+
+        rel.filterRelevantRelations(np,classifiedEntities);
+
+
         System.out.println(" END " );
-
-        /*et = new ExecutorTask("/Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit tagger -ner pt " + news);
-        thread = new Thread(et);
-        thread.start();
-        thread.join();*/
-
-
 
     }
 }

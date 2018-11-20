@@ -43,7 +43,6 @@ def search_Wikipedia(original_object,search_object):
 		x=difflib.get_close_matches(original_object,l)
 		if not x:
 			#didnt retrieved nothing, unlikely
-			print("bad search")
 			return ""
 		else:
 			if x.length>1:
@@ -57,8 +56,9 @@ def search_Wikipedia(original_object,search_object):
 
 def firstParagraphToFile(text,id):
 	lines = text.splitlines()
-	wikis=open("wikipediaExtracted/" + id + ".txt", "w")
-	wikis.write(lines[0] + "\n")
+	wikis=open("/Users/ruirua/Documents/PhD_Classes/AIE/work/wikipediaExtracted/" + id + ".txt", "w")
+	if len(lines)>0:
+		wikis.write(lines[0] + "\n")
 	wikis.close()
 
 

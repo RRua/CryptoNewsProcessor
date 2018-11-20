@@ -13,7 +13,6 @@ def newsTokenizer(news):
 	#print(text)
 	sdetect = nltk.data.load('tokenizers/punkt/portuguese.pickle')
 	sentences = '\n\n'.join(sdetect.tokenize(text.strip()))
-	tagger = pickle.load(open("tagger.pkl"))
 	portuguese_sent_tokenizer = nltk.data.load("tokenizers/punkt/portuguese.pickle")
 	sentences = portuguese_sent_tokenizer.tokenize(text)
 	words=open("/Users/ruirua/Documents/PhD_Classes/AIE/work/words.txt", "w")
