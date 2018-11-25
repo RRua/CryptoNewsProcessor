@@ -20,11 +20,11 @@ def extractNews(newsFile):
             print(err_msg)
         else:
             print("ok")
-            #retval = p.wait()
+            
 
 
-def getNews():
-    cmd ='scrapy runspider newsCrawler.py -s LOG_ENABLED=False -o news.json'
+def getNews(url):
+    cmd ='scrapy runspider newsCrawler.py -a url=' +url  + ' -s LOG_ENABLED=False -o news.json'
     pipes = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
     std_out, std_err = pipes.communicate()
     if pipes.returncode != 0:
@@ -40,7 +40,10 @@ def main(args):
     filename='news.json'
     if os.path.exists(filename):
         os.remove(filename)
-    getNews()
+    getNews("https://portaldobitcoin.com/noticias/")
+    extractNews(filename)
+    os.remove(filename)
+    getNews("https://www.criptomoedasfacil.com/noticias/")
     extractNews(filename)
 
 if __name__ == "__main__":

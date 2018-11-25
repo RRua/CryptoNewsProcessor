@@ -8,7 +8,7 @@ import sys
 
 def newsTokenizer(news):
 	print("tokenizing " + news)
-	file =open( news , 'r')
+	file =open( news.decode('latin1') , 'r')
 	text= file.read().decode('utf-8')
 	#print(text)
 	sdetect = nltk.data.load('tokenizers/punkt/portuguese.pickle')

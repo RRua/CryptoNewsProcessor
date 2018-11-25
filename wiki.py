@@ -3,6 +3,7 @@ import sys
 import difflib
 from collections import Counter
 import re
+import random
 
 def returnMostCommon(wordmatch,wordlist):
 	test1 = wordmatch.encode('utf-8')
@@ -45,10 +46,14 @@ def search_Wikipedia(original_object,search_object):
 			#didnt retrieved nothing, unlikely
 			return ""
 		else:
-			if x.length>1:
+			if len(x)>1:
 				page=wikipedia.page(returnMostCommon(original_object,x))
 			else:
-				page = wikipedia.page(x[0])
+				try:
+					page = wikipedia.page(x[0])
+				except wikipedia.DisambiguationError as e:
+					s = random.choice(e.options)
+					search_Wikipedia(original_object,s)
 	return page.content.encode('utf-8')
 		
 	
@@ -56,7 +61,7 @@ def search_Wikipedia(original_object,search_object):
 
 def firstParagraphToFile(text,id):
 	lines = text.splitlines()
-	wikis=open("/Users/ruirua/Documents/PhD_Classes/AIE/work/wikipediaExtracted/" + id + ".txt", "w")
+	wikis=open(("/Users/ruirua/Documents/PhD_Classes/AIE/work/wikipediaExtracted/" + id + ".txt").encode('utf-8'), "w")
 	if len(lines)>0:
 		wikis.write(lines[0] + "\n")
 	wikis.close()
