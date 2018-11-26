@@ -22,6 +22,8 @@ class PortalSpider(scrapy.Spider):
             #for paragraph in entry.css('div.td-post-content p'):
             for paragraph in entry.css('p'):# | //div/p/span'):
                 for x in (paragraph.css('::text').extract()):
+                    if x.isupper():
+                        x=x.lower()
                     s=s+ " " + x + "\n"
                 
         toFile(s , title,"#"+date)

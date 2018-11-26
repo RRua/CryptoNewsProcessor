@@ -123,12 +123,7 @@ public class Main {
         return lines.toArray(new String[]{});
     }
 
-    public List<Triple<String,String,String>> classifyPerson(String personName){
-        List<Triple<String,String,String>> list = new ArrayList<>();
-        Triple<String,String,String> t = null;
 
-        return list;
-    }
 
     public static boolean processNews(NewsProcessor np) throws Exception{
 
@@ -139,7 +134,6 @@ public class Main {
         np.readWordsFromFile("/Users/ruirua/Documents/PhD_Classes/AIE/work/words.txt", tokenSeparator );
         // np.decontractWordsNews(ner);
         Map<Integer,String> sentences= np.getSentences();
-
         System.out.println(" PoS tagging and Lemmatizing ...");
         ExecutorTask et = new ExecutorTask("/Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit tagger -nec pt " + np.newsPath);
         Thread thread = new Thread(et);
@@ -159,6 +153,10 @@ public class Main {
         for (String s : et.returnList) {
             np.addRelation(s, "\t");
         }
+
+        np.sentences= sentences;    // important
+
+
         /*
         for (String sentence : sentences.values()){
             i++;
@@ -247,7 +245,7 @@ public class Main {
             rel.filterRelevantRelations(wp,classifiedEntities);
         }*/
 
-
+        OntologyMapper om = new OntologyMapper();
         Set<Triple<String,String,String>> s = rel.filterBySubject(np,classifiedEntities);
         s= rel.filterByVerb(np,s);
         Map< String , Pair<String,String>>  subjects = new HashMap<>();
@@ -263,27 +261,27 @@ public class Main {
                 preds.put(t.third,se );
             }
         }
+        Set<Triple<String,String,String>> usefulRelations = new HashSet<>();
         for(Triple<String,String,String> t : s){
-            System.out.println("Useful triple -> "+ t );
+           // System.out.println("Possible Useful triple -> "+ t );
             if (subjects.containsKey(t.first)&& preds.containsKey(t.third)){
-               // System.out.println( "    corresponding transformed triple " + subjects.get(t.first).getKey() + " " + t.second + " " + ((Pair )(preds.get(t.third).toArray()[0])).getKey() );
-                rel.classifyTriple(t, subjects.get(t.first), preds.get(t.third));
+                Set<Triple<String,String,String>> temporary = rel.classifyTriple(t, subjects.get(t.first), preds.get(t.third), np);
+                for (Triple<String,String,String> te : temporary){
+                    usefulRelations.add(te);
+                    System.out.println(" TTTTT " + te);
+                    om.prepareSubjectToOntology(new Triple<>(te.first, subjects.get(t.first).getKey(), subjects.get(t.first).getValue()), "de" );
+                    om.preparePredToOntology(t, te, preds.get(t.third), rel);
+                }
             }
-        //    else
-         //       System.out.println("    Inutil: Suj? " + subjects.containsKey(t.first) + "Pred? "+  preds.containsKey(t.third) );
-
-
         }
 
+        System.out.println("RESULT: Extracted " + usefulRelations.size() + " triples from " + s.size() + " possible useful triples ");
+        OntologyBridge ob = new OntologyBridge();
+        ob.insertEntityIntoOntology(om.relationsToSend);
 
-        // x.putAll(rel.filterByVerb(np, s));
-
-
-
-        //rel.filterRelevantRelations(np,classifiedEntities);
-
-        
-
+        for (Triple<String,String,String> tr : usefulRelations){
+            System.out.println(" Resultant Triple "+ tr);
+        }
         //System.out.println("Relevant entities:");
         /*for (String s : rel.entitiesMap.keySet()){
             System.out.println(s + " -> " + rel.entitiesMap.get(s));

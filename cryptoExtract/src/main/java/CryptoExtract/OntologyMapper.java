@@ -10,6 +10,8 @@ public class OntologyMapper {
     public Map<String, Pair<String,String>> mapIssueRelated = new HashMap<>();
     public Map<String, Pair<String,String>> mapEventRelated = new HashMap<>();
 
+    public static HashSet<Triple<String,String,String>> relationsToSend = new HashSet<>();
+
     /*
 
        usefulCaracteristic.put("vulnerabilidade","Issue");
@@ -80,73 +82,113 @@ public class OntologyMapper {
 
 
 
-    public String getInstance (String id, String rel, Iterable<String> types ){
+    public String getInstance (String id, String rel, String type ){
         String batata = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                 "PREFIX crypto: <http://www.semanticweb.org/ruirua/ontologies/CryptoExtract#>\n" +
                 "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"+
                 "PREFIX re: <http://www.w3.org/2000/10/swap/reason#>\n";
+        batata+= "insert {crypto:" + id +" " + rel + " crypto:" + type + " } where {}\n";
 
-        for (String type : types){
-            batata+= "insert {crypto:" + id +" " + rel + " crypto:" + type + " } where {}\n";
-        }
         return batata;
     }
 
 
     // list of triple (subj, lemma,type)
-    public void prepareSubjectToOntology(List<Triple<String,String,String>> subjects, String relBetween){
-        if (subjects.size()==1){ // simple subject
+    public void prepareSubjectToOntology(Triple<String,String,String> subj, String relBetween){
+        String  [] subjects = subj.first.split(" ");
+        String allsubs=subj.first.replaceAll(" ", "_");
+        if (subjects.length==1){ // simple subject
 
-                Pair<String,String> p = mapGets(subjects.get(0).second);
+                Pair<String,String> p = mapGets(subj.second);
                 if (p==null){ // is currency or other
-                    List<String> l = new ArrayList<>();
-                    l.add(subjects.get(0).third);
-                    System.out.println(getInstance(subjects.get(0).second, "rdf:type" , l ));
-                    l.remove(0);
-                    //l.add(p.getValue());
-                    //System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // data property
-
+                    //     System.out.println(getInstance(subj.second, "rdf:type" , subj.third ));
+                    relationsToSend.add(new Triple<>(subj.second,"rdf:type", subj.third) );
                 }
                 else{
-                    List<String> l = new ArrayList<>();
-                    l.add(p.getKey());
-                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
-                    l.remove(0);
-                    l.add(p.getValue());
-                    System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // data property
+                    //    System.out.println(getInstance(subj.first, "rdf:type" , p.getKey() ));
+                    relationsToSend.add(new Triple<>(subj.first,"rdf:type", p.getKey()) );
+                    //    System.out.println(getInstance(subj.first, "owl:instanceOf" , p.getValue() )); // data property
+                    relationsToSend.add(new Triple<>(subj.first,"owl:instanceOf", p.getValue()) );
                 }
 
 
 
         }
-        else if (subjects.size()==2){ // composed subject ( e.g investidores de bitcoin
+        else if (subjects.length==2){ // composed subject ( e.g investidores de bitcoin
             if (relBetween.equals("de")){ // OF
-                    Pair<String,String> p = mapGets(subjects.get(0).second);
+                    Pair<String,String> p = mapGets(subj.second);
                 if (p==null){
-                    List<String> l = new ArrayList<>();
-                    l.add(subjects.get(0).third);
-                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
-                    l.remove(0);
-                   // l.add(p.getValue());
-                   // System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // object property
-                   // l.remove(0);
-                    l.add((subjects.get(1).second ));
-                    System.out.println(getInstance(subjects.get(0).first, "owl:Of" , l )); // object property
+                    //     System.out.println(getInstance(allsubs, "rdf:type" , subj.third ));
+                    relationsToSend.add(new Triple<>(allsubs,"rdf:type", subj.third) );
+                    //     System.out.println(getInstance(allsubs, "owl:Of", subjects[1]  )); // object property
+                    relationsToSend.add(new Triple<>(allsubs,"owl:Of", subjects[1]) );
+
                 }
                 else{
-                    List<String> l = new ArrayList<>();
-                    l.add(p.getKey());
-                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
-                    l.remove(0);
-                    l.add(p.getValue());
-                    System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // object property
-                    l.remove(0);
-                    l.add((subjects.get(1).second ));
-                    System.out.println(getInstance(subjects.get(0).first, "owl:Of" , l )); // object property
+                    //System.out.println(getInstance(subjects[1], "rdf:type" , p.getKey()));
+                    relationsToSend.add(new Triple<>(subjects[1],"rdf:type", p.getKey()) );
+                  //  System.out.println(getInstance(subjects[1], "owl:instanceOf" , p.getValue() )); // object property
+                    relationsToSend.add(new Triple<>(subjects[1],"owl:instanceOf",p.getValue()) );
+                    //   System.out.println(getInstance(subjects[1], "owl:Of" , subj.second )); // object property
+                    relationsToSend.add(new Triple<>(subjects[1],"owl:instanceOf",subj.second) );
                 }
             }
         }
+    }
+
+
+    // T (pred, real pred, type) , coisos
+    public void preparePredToOntology (Triple<String,String,String> originalTriple,Triple<String,String,String> classifiedTriple, Set<Pair<String,String>> related, RelationFilter rel ){
+        List<String> l = new ArrayList<>();
+        if (classifiedTriple.third.equals("Statement")){
+            //     System.out.println(getInstance(originalTriple.third.replaceAll(" ", "_"), "rdf:type" , "Statement" ));
+            relationsToSend.add(new Triple<>(originalTriple.third.replaceAll(" ", "_"),"rdf:type", "Statement") );
+            //    System.out.println(getInstance(classifiedTriple.first.replaceAll(" ", "_"), "owl:said" , originalTriple.third.replaceAll(" ", "_") )); // data property
+            relationsToSend.add(new Triple<>(classifiedTriple.first.replaceAll(" ", "_"),"rdf:said", originalTriple.third.replaceAll(" ", "_")) );
+
+            // related to
+            for (Pair<String,String> p : related){
+                String mat=rel.matchEvent(p.getKey());
+                if (rel.usefulRelations.containsKey(mat)){
+                    //          System.out.println(getInstance(originalTriple.third.replaceAll(" ", "_") , "owl:relatedTo" , rel.usefulRelations.get(mat) ));
+                    relationsToSend.add(new Triple<>(originalTriple.third.replaceAll(" ", "_"),"owl:relatedTo" , rel.usefulRelations.get(mat)) );
+                }
+                else{
+                    //          System.out.println(getInstance(originalTriple.third.replaceAll(" ", "_") , "owl:relatedTo" , p.getKey() ));
+                    relationsToSend.add(new Triple<>(originalTriple.third.replaceAll(" ", "_"),"owl:relatedTo" , p.getKey()) );
+
+                }
+            }
+
+        }
+        else {
+            String mat = rel.matchEvent(classifiedTriple.second);
+            if (rel.usefulRelations.get(mat).equals("Action")){
+                //       System.out.println(getInstance( classifiedTriple.second, "rdf:type" , "Action" ));
+                relationsToSend.add(new Triple<>(classifiedTriple.second,"rdf:type", "Action") );
+                //       System.out.println(getInstance( classifiedTriple.first.replaceAll(" ", "_"), "owl:"+classifiedTriple.second , classifiedTriple.third ));
+                relationsToSend.add(new Triple<>(classifiedTriple.first.replaceAll(" ", "_"),"owl:"+classifiedTriple.second ,  classifiedTriple.third ) );
+            }
+            else if (rel.usefulRelations.get(mat).equals("State")){
+                if (!classifiedTriple.first.equals(classifiedTriple.first)){
+                    //           System.out.println(getInstance( classifiedTriple.third, "rdf:type" , "State" ));
+                    relationsToSend.add(new Triple<>(classifiedTriple.third,"rdf:type", "State") );
+
+                }
+                //        System.out.println(getInstance( classifiedTriple.first.replaceAll(" ", "_"), "owl:"+classifiedTriple.second , classifiedTriple.third ));
+                relationsToSend.add(new Triple<>(classifiedTriple.first.replaceAll(" ", "_"),"owl:"+classifiedTriple.second,classifiedTriple.third));
+            }
+        }
+
+
+
+
+
+
+
+
     }
 
 

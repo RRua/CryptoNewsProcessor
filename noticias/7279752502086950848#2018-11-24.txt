@@ -1,0 +1,9 @@
+ O governo sul-coreano usará a tecnologia blockchain para rastrear carne bovina e fornecer aos consumidores informações da cadeia de fornecimento de alimentos, informou a agência de notícias 
+ Yonhap
+ , a maior agência de notícias da Coreia do Sul, no dia 20 de novembro.
+ A tecnologia blockchain foi implementada no programa piloto que será lançado em conjunto pelo Ministério da Ciência e ICT e pelo Ministério da Agricultura, Alimentação e Assuntos Rurais. A fase de testes do programa está prevista para dezembro e o lançamento oficial do sistema será em janeiro de 2019.
+ De acordo com a Yonhap, os ministérios estão planejando usar a tecnologia de contabilidade distribuída (DLT) “para rastrear carne bovina através da cadeia de fornecimento para fornecer aos consumidores informações sobre a fonte de seus alimentos”. O artigo também afirma:
+ “A nova plataforma usa a tecnologia blockchain para armazenar informações relacionadas e certificados no livro distribuído para aumentar a eficiência e a credibilidade.”
+ O uso da tecnologia blockchain para rastrear produtos agrícolas é uma das implementações comuns da tecnologia em todo o mundo. Em agosto, o maior exportador de grãos da Austrália, o CBH Group, fez uma parceria com uma startup local para usar a tecnologia blockchain para rastrear remessas de aveia.
+ No mês passado, as quatro maiores empresas agrícolas do mundo – a Archer Daniels Midland Co., a Bunge Ltd., a Cargill Inc. e a Louis Dreyfus Co., comumente conhecida como ABCD – concordaram em usar as tecnologias blockchain e inteligência artificial (AI) para reduzir custos e tornar o comércio mais eficiente e transparente.
+

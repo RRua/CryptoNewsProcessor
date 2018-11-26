@@ -52,6 +52,6 @@ public class Triple<F, S, T> {
 
     @Override
     public int hashCode() {
-        return (first.toString() +  second.toString() + third.toString()).hashCode();
+        return (first.hashCode() +  second.hashCode() + third.toString()).hashCode();
     }
 }

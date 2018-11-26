@@ -40,10 +40,11 @@ public class BaseKnowledge {
         cache.put("website".toLowerCase(),"System");
         cache.put("portal".toLowerCase(),"System");
         cache.put("criptomoedas".toLowerCase(),"Cryptocurrency");
-        cache.put("criptomoeda".toLowerCase(),"Cryptocurrency");
+        cache.put("criptomoeda".toLowerCase(),"Currency");
         cache.put("Blockchain".toLowerCase(),"Cryptocurrency");
         cache.put("plataforma".toLowerCase(),"System");
         cache.put("criptoativos".toLowerCase(),"Cryptocurrency");
+        cache.put("criptoativo".toLowerCase(),"Cryptocurrency");
         cache.put("mercado".toLowerCase(),"Cryptocurrency");
         cache.put("rede".toLowerCase(),"System");
         cache.put("US".toLowerCase(),"Location");
@@ -64,6 +65,8 @@ public class BaseKnowledge {
         cache.put("etoro".toLowerCase(),"Organization");
         cache.put("CFDs".toLowerCase(), "Currency");
         cache.put("CFD".toLowerCase(), "Currency");
+        cache.put("moeda".toLowerCase(), "Currency");
+        cache.put("moedas".toLowerCase(), "Currency");
         //cache.put("hashrate".toLowerCase(),"Cryptocurrency");
 
     }

@@ -16,7 +16,7 @@ public class NewsProcessor implements TextProcessor {
     Map<String,LinkedList<Triple<Integer,Integer,String>>> wordsIndexList = new HashMap();
     public Map<String, Set<PoSTriple>> news_pos_info = new HashMap<>(); // tag -> (word - > (word, lemma, tag)
     public List<Triple<String,String, String>> news_relations_triples = new ArrayList<>();
-
+    public Map<Integer,String> sentences = new HashMap<>();
 
 
 
@@ -34,28 +34,33 @@ public class NewsProcessor implements TextProcessor {
 
 
     public Map<Integer,String> getSentences(){
-        Map<Integer,TreeSet<Triple<Integer,Integer,String>>> map = new HashMap<>();
-        for (LinkedList<Triple<Integer,Integer,String>> l : this.wordsIndexList.values()){
-            for (Triple<Integer,Integer,String> t  : l){
-                if (map.containsKey(t.first)){
-                    map.get(t.first).add(t);
-                }
-                else {
-                    TreeSet<Triple<Integer,Integer,String>> tt = new TreeSet<>(new TripleComparator());
-                    tt.add(t);
-                    map.put(t.first,tt);
+        if(sentences.isEmpty()&& !wordsIndexList.isEmpty()){
+            Map<Integer,TreeSet<Triple<Integer,Integer,String>>> map = new HashMap<>();
+            for (LinkedList<Triple<Integer,Integer,String>> l : this.wordsIndexList.values()){
+                for (Triple<Integer,Integer,String> t  : l){
+                    if (map.containsKey(t.first)){
+                        map.get(t.first).add(t);
+                    }
+                    else {
+                        TreeSet<Triple<Integer,Integer,String>> tt = new TreeSet<>(new TripleComparator());
+                        tt.add(t);
+                        map.put(t.first,tt);
+                    }
                 }
             }
-        }
-        Map<Integer,String> ret = new HashMap<>();
-        for (TreeSet<Triple<Integer,Integer,String>> ts : map.values()){
-            StringBuilder sb = new StringBuilder();
-            for (Triple<Integer,Integer,String> triple : ts){
-               sb.append(" " +triple.third);
+            Map<Integer,String> ret = new HashMap<>();
+            for (TreeSet<Triple<Integer,Integer,String>> ts : map.values()){
+                StringBuilder sb = new StringBuilder();
+                for (Triple<Integer,Integer,String> triple : ts){
+                    sb.append(" " +triple.third);
+                }
+                ret.put(((Integer) ts.first().first), sb.toString());
             }
-            ret.put(((Integer) ts.first().first), sb.toString());
+            return ret;
         }
-        return ret;
+        else {
+            return sentences;
+        }
     }
 
 
@@ -473,5 +478,50 @@ public class NewsProcessor implements TextProcessor {
         }
         return true;
 
+    }
+
+    @Override
+    public String getSentenceOfWords(Set<String> words) {
+        //Map<Integer,String > mp = this.getSentences();
+        int lowestSentenceIndex = 1, remainingWordsSentence =100;
+        for ( String sentence : getSentences().values()){
+            Set<String> newSet = new HashSet<>();
+            newSet.addAll(words);
+            for (String word : sentence.split(" ")){
+                Pair<String,String> p = getLemmaAndTagOfProcessedWord(word);
+                if (p==null){
+                    if ( newSet.contains(word)){
+                        newSet.remove(word);
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else{
+                    String lemma = p.getKey();
+                    if (newSet.contains(lemma)){
+                        newSet.remove(lemma);
+                    }
+                    else if ( newSet.contains(word)){
+                        newSet.remove(word);
+                    }
+                }
+            }
+            if (newSet.isEmpty()){
+                return sentence;
+            }
+            else {
+                int remaining = newSet.size();
+                if (remaining<remainingWordsSentence){
+                   for (Integer index : getSentences().keySet()){
+                       if(getSentences().get(index).equals(sentence)){
+                           lowestSentenceIndex=index;
+                       }
+                   }
+                   remainingWordsSentence=remaining;
+                }
+            }
+        }
+        return getSentences().get(lowestSentenceIndex);
     }
 }

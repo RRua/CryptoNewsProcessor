@@ -20,6 +20,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,11 +67,8 @@ public class OntologyBridge {
     ///////////
 
 
-    public void insertEntityIntoOntology(String entity, String rel, String entityType){
-        String relation ="";
-        if (rel.equals("instanceOf")){
-            relation="rdf:type";
-        }
+    public void insertEntityIntoOntology(String entity, String relation , String entityType){
+
         entityType=entityType.replaceAll(" ", "_");
         entity=entity.replaceAll(" ", "_");
         RDFConnection conn = RDFConnectionFactory.connect(url);
@@ -79,11 +77,19 @@ public class OntologyBridge {
                 "PREFIX crypto: <http://www.semanticweb.org/ruirua/ontologies/CryptoExtract#>\n" +
                 "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
                 "PREFIX re: <http://www.w3.org/2000/10/swap/reason#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"+
                 "insert {crypto:" + entity +" " + relation + " crypto:" + entityType + " } where {}\n";
         UpdateRequest request = UpdateFactory.create(batata);
         conn.update(request);
         conn.close() ;
 
+    }
+
+
+    public void insertEntityIntoOntology(Collection<Triple<String,String,String>> col){
+        for (Triple<String,String,String> t : col){
+            insertEntityIntoOntology(t.first,t.second,t.third);
+        }
     }
 
 

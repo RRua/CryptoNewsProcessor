@@ -394,4 +394,28 @@ public class WikiPediaProcessor implements TextProcessor {
         return true;
 
     }
+    @Override
+    public String getSentenceOfWords(Set<String> words) {
+        //Map<Integer,String > mp = this.getSentences();
+        for ( String sentence : getSentences().values()){
+            Set<String> newSet = new HashSet<>();
+            newSet.addAll(words);
+            for (String word : sentence.split(" ")){
+                String lemma = getLemmaAndTagOfProcessedWord(word).getKey();
+                if (newSet.contains(lemma)){
+                    newSet.remove(lemma);
+                }
+                else if ( newSet.contains(word)){
+                    newSet.remove(word);
+                }
+            }
+            if (newSet.isEmpty()){
+                return sentence;
+            }
+        }
+        return null;
+    }
+
+
+
 }

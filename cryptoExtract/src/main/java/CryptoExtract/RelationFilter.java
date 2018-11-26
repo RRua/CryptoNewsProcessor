@@ -2,6 +2,7 @@ package CryptoExtract;
 
 import Utils.Contraction;
 import javafx.util.Pair;
+import org.apache.jena.tdb.store.Hash;
 
 import javax.print.attribute.standard.JobStateReasons;
 import java.util.*;
@@ -11,6 +12,8 @@ public class RelationFilter {
     public static Map<String,String> usefulRelations = new HashMap<>(); // lemmatized // relation -> Ontology relation
     public static Map<String,String> usefulCaracteristic = new HashMap<>(); // lemmatized // relation -> Ontology relation
     public static Map<String,String> truncatedEvents = new HashMap<>();
+    public static Map<String,String> usefulNames = new HashMap<>();
+    public static Map<String,String> usefulAdjectives = new HashMap<>();
     //public static Set<String> issueCaracteristic = new HashSet<>(); // lemmatized // relation -> Ontology relation
     //public static Set<String> coinCaracteristic = new HashSet<>(); // lemmatized // relation -> Ontology relation
     public  Map<String,String> entitiesMap = new HashMap<>(); // contains all entities and sinonyms
@@ -19,16 +22,37 @@ public class RelationFilter {
     public  Map<String,String> classifiedEntities = new HashMap<>();
     public String [] auxVerb = {"ser","estar", "ter", "haver","querer", "dever", "poder","conseguir",
         "pretender", "chegar", "tentar", "continuar", "começar" , "costumar" , "ir", "vir", "voltar",
-            "tornar", "andar", "deixar" , "acabar", };
+            "tornar", "andar", "deixar" , "acabar", "poder"};
 
 
     public RelationFilter( BaseKnowledge b){
        //usefulRelations.add("");
 
+        usefulNames.put("pre(c|ç).*", "Price");
+        usefulNames.put("val(i|o).*", "Value");
+        usefulNames.put("hashrate.*", "Value");
+        usefulAdjectives.put("baix.*", "Decrease");
+        usefulAdjectives.put("subi.*", "Increase");
+        usefulAdjectives.put("dimin.*", "Decrease");
+        usefulAdjectives.put("aument.*", "Increase");
+        usefulAdjectives.put("ca(i|í)*", "Decrease");
+        usefulAdjectives.put("levant.*", "Increase");
+        usefulAdjectives.put("mant.*", "Neutral");
+        usefulAdjectives.put("estabil.*", "Neutral");
+        usefulAdjectives.put("ascend.*", "Increase");
+
+
         // relations = verbs or set of words with verb
        usefulRelations.put("ser", "instanceOf");
        usefulRelations.put("ser um", "instanceOf");
        usefulRelations.put("fazer", "did");
+        truncatedEvents.put("f(a|e)z.*", "Action");
+        usefulRelations.put("executar", "did");
+        truncatedEvents.put("execut.*", "Action");
+        usefulRelations.put("efetuar", "did");
+        truncatedEvents.put("efetu.*", "Action");
+        usefulRelations.put("reagir", "did");
+        truncatedEvents.put("reag.*", "Action");
        usefulRelations.put("dizer", "said");
        usefulRelations.put("declarar", "said");
        usefulRelations.put("afirmar", "said");
@@ -50,7 +74,8 @@ public class RelationFilter {
         usefulRelations.put("conter", "has");
         usefulRelations.put("ter", "has");
         usefulRelations.put("possuir", "has");
-
+        usefulRelations.put("ver", "saw");
+        truncatedEvents.put("ve.*", "saw");
         usefulRelations.put("usar", "Action");
         truncatedEvents.put("us(a|o).*", "Action");
         usefulRelations.put("adoptar", "Action");
@@ -60,7 +85,8 @@ public class RelationFilter {
         usefulRelations.put("descer", "State");
         truncatedEvents.put("des(c|ç).*", "State");
         usefulRelations.put("cair", "State");
-        truncatedEvents.put("cai(a|u).*", "State");
+        truncatedEvents.put("cai.*", "State");
+        truncatedEvents.put("caí.*", "State");
         usefulRelations.put("baixar", "State");
         truncatedEvents.put("baix.*", "State");
         usefulRelations.put("descender", "State");
@@ -558,22 +584,220 @@ public class RelationFilter {
 
 
     // classification like (Person ,Said, Statement)
-    public Triple<String,String,String> classifyTriple( Triple<String,String,String> original_Triple , Pair<String,String> subjPair, Set<Pair<String,String>> predPair  ){
+    public Set<Triple<String,String,String>> classifyTriple( Triple<String,String,String> original_Triple , Pair<String,String> subjPair, Set<Pair<String,String>> predPair , TextProcessor tp  ){
+        Set<Triple<String,String,String>> returnSet = new HashSet<>( );
         String retFirst = null, retSecond=null, retThird = null;
         String verb = original_Triple.second;
         String relationOfVerb = usefulRelations.get(verb);
+        if (containsAuxVerb(verb)){
+            verb=original_Triple.second.split(" ")[original_Triple.second.split(" ").length-1];
+            relationOfVerb= usefulRelations.get(verb);
+        }
         if (relationOfVerb!=null){
-            retFirst=subjPair.getKey();
+            retFirst=subjPair.getValue();
             retSecond=relationOfVerb;
+            //System.out.println("Rel " + retFirst + " <-> " + retSecond);
             if (relationSubjVerbMakesSense(retFirst,retSecond)){
+
                 if (retSecond.equals("said")){
-                    return new Triple<>(retFirst,retSecond, "Statement");
+                    //System.out.println("##Statement unrolled : "+ subjPair.getKey() + " said " + original_Triple.third);
+                    returnSet.add( new Triple<>(subjPair.getKey(),retSecond, "Statement"));
+                }
+                else if (retSecond.equals("did")){
+                    //System.out.println( retFirst +" fez "+ original_Triple.third);
+                    for (Pair<String,String> p : predPair){
+                        String mat = matchEvent(p.getKey());
+                        if (mat!=null){
+                            //System.out.println( "inferi que -> " + retFirst +" " + mat + " " );
+                            if (usefulRelations.get(mat).equals("Action")){
+                                String act = unrollAction(subjPair.getKey(), mat, original_Triple.third, tp );
+                                //System.out.println("##Action unrolled : "+ subjPair.getKey() + " " + act);
+                                returnSet.add( new Triple<>(subjPair.getKey(),act.split(" ")[0], act.split(" ")[1]));
+
+                            }
+                            else if (usefulRelations.get(mat).equals("State")){
+                                String what =  unrollState(original_Triple.first, mat, original_Triple.third, tp );
+                               // System.out.println("##State unrolled : " +subjPair.getValue() + " " + what);
+                                returnSet.add( new Triple<>(subjPair.getKey(),what.split(" ")[0], what.split(" ")[1]));
+                            }
+                        }
+                    }
+                }
+                else if (retSecond.equals("has")){
+                    // tentar ver se nao ha outro verbo no
+                   // System.out.println("tem tem");
+                    for (Pair<String,String> p : predPair){
+                        String mat = matchEvent(p.getKey());
+                        if (mat!=null){
+                            //System.out.println( "inferi que -> " + retFirst +" " + mat + " " );
+                            if (usefulRelations.get(mat).equals("Action")){
+                                String act = unrollAction(subjPair.getKey(), mat, original_Triple.third, tp );
+                               // System.out.println("##Action unrolled : "+ subjPair.getKey() + " " + act);
+                                returnSet.add( new Triple<>(subjPair.getKey(),act.split(" ")[0], act.split(" ")[1]));
+                            }
+                            else if (usefulRelations.get(mat).equals("State")){
+                                String what =  unrollState(original_Triple.first, mat, original_Triple.third, tp );
+                                //System.out.println("##State unrolled : " +subjPair.getValue() + " " + what);
+                                returnSet.add( new Triple<>(subjPair.getKey(),what.split(" ")[0], what.split(" ")[1]));
+                            }
+                        }
+                    }
+
+                }
+                else if (retSecond.equals("State")){
+                    //System.out.println( retFirst +" esta "+ original_Triple.third);
+                    for (Pair<String,String> p : predPair){
+                        String mat = matchEvent(p.getKey());
+                        if (mat!=null){
+                            //System.out.println( "inferi que -> " + retFirst +"  " + mat + " " );
+                            if (usefulRelations.get(mat).equals("Action")){
+                                String act = unrollAction(subjPair.getKey(), mat, original_Triple.third, tp );
+                               // System.out.println("##Action unrolled : "+ subjPair.getKey() + " " + act);
+                                returnSet.add( new Triple<>(subjPair.getKey(),act.split(" ")[0], act.split(" ")[1]));
+                            }
+                            else if (usefulRelations.get(mat).equals("State")){
+                                String what = unrollState(original_Triple.first, mat, original_Triple.third, tp );
+                              //  System.out.println("##State unrolled : " +subjPair.getValue() + " " + what);
+                                returnSet.add( new Triple<>(subjPair.getKey(),what.split(" ")[0], what.split(" ")[1]));
+                            }
+                        }
+                    }
+                }
+                else if (retSecond.equals("Action")){
+                    //System.out.println( retFirst +" " +retSecond + " "+ original_Triple.third);
+                    if (usefulRelations.containsKey(retSecond) && usefulRelations.get(retSecond).equals("Action")){
+                        String act = unrollAction(subjPair.getKey(), retSecond, original_Triple.third, tp );
+                      //  System.out.println("##Action unrolled : "+ subjPair.getKey() + " " + act);
+                        returnSet.add( new Triple<>(subjPair.getKey(),act.split(" ")[0], act.split(" ")[1]));
+                    }
+                }
+                else if (retSecond.equals("saw")){
+                    // tem que ter relacao relevante a seguir
+                    for (Pair<String,String> p : predPair){
+                        String mat = matchEvent(p.getKey());
+                        if (mat!=null){
+                            //System.out.println( "inferi que -> " + retFirst +"  " + mat + " " );
+                            retSecond=mat;
+                            if (usefulRelations.get(mat).equals("Action")){
+                                String act = unrollAction(subjPair.getKey(), mat, original_Triple.third, tp );
+                               // System.out.println("##Action unrolled : "+ subjPair.getKey() + " " + act);
+                                returnSet.add( new Triple<>(subjPair.getKey(),act.split(" ")[0], act.split(" ")[1]));
+                            }
+                            else if (usefulRelations.get(mat).equals("State")){
+                                String what = unrollState(original_Triple.first, mat, original_Triple.third, tp );
+                               // System.out.println("##State unrolled : " +subjPair.getValue() + " " + what);
+                                returnSet.add( new Triple<>(subjPair.getKey(),what.split(" ")[0], what.split(" ")[1]));
+                            }
+                        }
+                    }
                 }
             }
 
         }
-        return new Triple<>(retFirst,retSecond,retThird);
+        return returnSet;
     }
+
+
+    // answer  question:  which (Currency, Organization) oneSubj (buyed,traded, ...) ?
+    public String unrollAction(String oneSubj, String action, String pred, TextProcessor tp ){
+
+        // first check if predicative contains objective of relation // currency or organization
+        for (String word : pred.split(" ")){
+            Pair<String, String> p = tp.getLemmaAndTagOfProcessedWord(word);
+            if (p==null){
+                continue;
+            }
+            String normalized = p.getKey();
+            String tag = p.getValue();
+            if (base.getType(word,tag).equals("Currency")|| base.getType(word,tag).equals("Cryptocurrency") || base.getType(word,tag).equals("Organization") ){
+                return action + " " + word;
+            }
+            else if (base.getType(normalized,tag).equals("Currency")|| base.getType(normalized,tag).equals("Cryptocurrency") || base.getType(normalized,tag).equals("Organization") ){
+                return action + " " + word;
+            }
+            else if (classifiedEntities.containsKey(word)|| classifiedEntities.containsKey(normalized)){
+                return action + " " + word;
+            }
+        }
+
+        // answer not found, get sentence and try to find in sentence
+        HashSet h = new HashSet();
+        h.addAll(Arrays.asList(oneSubj.split(" ")));
+        h.addAll(Arrays.asList(pred.split(" ")));
+        String sentence = tp.getSentenceOfWords( h); // get corrensponding sentence
+        // pruning sentence to find objective of relation ( comprou bitcoin)
+        if (sentence!=null){
+            boolean found= false;
+            for (String word : sentence.split(" ")){
+                Pair<String, String> p = tp.getLemmaAndTagOfProcessedWord(word);
+                if (p==null ){
+                    continue;
+                }
+                else if (!found){
+                    if (p.getValue().equals(action)|| action.equals(word)){
+                        found=true;
+                    }
+                    else {
+                        //Pair<String,String> pp = tp.getLemmaAndTagOfProcessedWord(word);
+                       // if (pp!=null&&usefulRelations.containsKey(pp.getKey())&& usefulRelations.get(pp.getKey()).equals("Action")){
+                        String match = matchEvent(word);
+                        if (match!=null&& match.equals(action)){
+                            found=true;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+
+                String normalized = p.getKey();
+                String tag = p.getValue();
+                if (base.getType(word,tag).equals("Currency")|| base.getType(word,tag).equals("Cryptocurrency") || base.getType(word,tag).equals("Organization") ){
+                    if(classifiedEntities.containsKey(word)){
+                        return action + " " + word;
+                    }
+                }
+                else if (base.getType(normalized,tag).equals("Currency")|| base.getType(normalized,tag).equals("Cryptocurrency") || base.getType(normalized,tag).equals("Organization") ){
+                    if (classifiedEntities.containsKey(normalized)){
+                        return action + " " + word;
+                    }
+                }
+                else if ((classifiedEntities.containsKey(word)|| classifiedEntities.containsKey(normalized))){
+                    if (classifiedEntities.get(word)!=null && (classifiedEntities.get(word).equals("Currency")|| classifiedEntities.get(word).equals("Cryptourrency") || classifiedEntities.get(word).equals("Organization") )) {
+                        return action + " " + word;
+                    }
+                    else if (classifiedEntities.get(normalized)!=null && (classifiedEntities.get(normalized).equals("Currency")|| classifiedEntities.get(normalized).equals("Cryptourrency") || classifiedEntities.get(normalized).equals("Organization") )) {
+                        return action + " " + normalized;
+                    }
+                }
+            }
+        }
+
+        return action + " " + "Currency";
+    }
+
+    // answer to question : what is decrasing / increasing ? answer: price, value , rate?
+    public String unrollState(String fullSubj , String event, String pred, TextProcessor tp ){
+        HashSet h = new HashSet();
+        h.addAll(Arrays.asList(fullSubj.split(" ")));
+        h.addAll(Arrays.asList(pred.split(" ")));
+        String sentence = tp.getSentenceOfWords( h); // get corrensponding sentence
+        // get index of splitpoint (verb of relation)
+        if (sentence==null){
+            return  event + " " + "Nothing";
+        }
+        String[] wordsOfSentence = sentence.split(" ");
+        for (String word : wordsOfSentence){
+            for ( String name : usefulNames.keySet()){
+                if (word.matches(name)){
+                    return event +  " " + word;
+                }
+            }
+        }
+
+        return  event + " " + "Nothing";
+    }
+
 
 
     public boolean relationSubjVerbMakesSense(String subjtype, String relType){
@@ -593,6 +817,9 @@ public class RelationFilter {
             else if (relType.equals("State")){
                 return true;
             }
+            else if (relType.equals("saw")){
+                return true;
+            }
         }
         else if (subjtype.equals("Organization")){
             if (relType.equals("said")){
@@ -610,6 +837,9 @@ public class RelationFilter {
             else if (relType.equals("State")){
                 return true;
             }
+            else if (relType.equals("saw")){
+                return true;
+            }
         }
         if (subjtype.equals("Currency")){
             if (relType.equals("did")){
@@ -622,6 +852,26 @@ public class RelationFilter {
                 return true;
             }
             else if (relType.equals("State")){
+                return true;
+            }
+            else if (relType.equals("saw")){
+                return true;
+            }
+        }
+        if (subjtype.equals("Cryptocurrency")){
+            if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+            else if (relType.equals("saw")){
                 return true;
             }
         }
@@ -641,6 +891,9 @@ public class RelationFilter {
             else if (relType.equals("State")){
                 return true;
             }
+            else if (relType.equals("saw")){
+                return true;
+            }
         }
         if (subjtype.equals("Person")){
             if (relType.equals("said")){
@@ -658,17 +911,19 @@ public class RelationFilter {
             else if (relType.equals("State")){
                 return true;
             }
+            else if (relType.equals("saw")){
+                return true;
+            }
         }
         return false;
     }
-
 
 
     public String matchEvent(String possibleEv){
         for (String st :  truncatedEvents.keySet()){
             if (possibleEv.matches(st)){
                 for (String s : usefulRelations.keySet()){
-                    if(s.matches(st)){
+                    if(s.matches(st.replace("í","i").replace("õ","o"))){
                         return s;
                     }
                 }
@@ -676,6 +931,7 @@ public class RelationFilter {
         }
         return null;
     }
+
 
     public boolean containsAuxVerb(String normalizedVerb){
         for (String s : auxVerb){
@@ -688,5 +944,6 @@ public class RelationFilter {
         }
         return false;
     }
+
 
 }

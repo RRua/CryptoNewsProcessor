@@ -18,6 +18,7 @@ public interface TextProcessor {
     Pair<String,String> getLemmaAndTagOfProcessedWord(String word);
     String getVerbOfProcessedSentence(String sent);
     boolean isSingular(String word);
+    String getSentenceOfWords(Set<String> words);
 
 
 }

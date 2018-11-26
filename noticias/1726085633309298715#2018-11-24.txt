@@ -1,0 +1,36 @@
+ Nesta semana
+ , a Comissão de Valores Mobiliários dos Estados Unidos (SEC, na sigla em inglês) obrigou duas startups de criptoativos a registrarem suas vendas de tokens como ofertas de valores mobiliários. É a primeira vez que a SEC impõe essa ação sem acusações adicionais de fraude.
+ Em dois pedidos publicados na manhã de sexta-feira, 16 de novembro, a SEC anunciou que havia informado às startups 
+ CarrierEQ Inc
+ . – outrora conhecida como 
+ Airfox
+  – e 
+ Paragon Coin Inc
+ . que ambas deveriam registrar seus tokens como títulos mobiliários e reembolsar os investidores que adquiriram os tokens previamente. Adicionalmente, elas foram multadas em US$250.000 cada e terão que arquivar declarações periódicas junto à SEC pelo menos no próximo ano.
+ E, assim como o acordo da semana passada com Zachary Coburn, fundador da exchange descentralizada EtherDelta, esse parece ser um prenúncio das coisas que estão por vir.
+ Nic Carter, sócio da 
+ Castle Island Ventures
+ , um fundo de capital de risco focado em startups de blockchain, acredita que a SEC está construindo um conjunto de jurisprudências contra ofertas de valores mobiliários não registradas, visando punir infratores.
+ “É realmente difícil dizer ou prever o que a SEC vai fazer. Mas pelo que eu entendo da estratégia deles, eles estão indo atrás dos players mais fáceis, dos casos em que está claro que vai haver um lucro obtido com o token”, disse Carter à CoinDesk.
+ As ordens recentes parecem apoiar essa teoria, de acordo com Stephen Palley, advogado do escritório de advocacia Anderson Kill, com sede em Washington D.C. Com base na maneira como são redigidos, Palley diz que os pedidos “parecem se aplicar a 95% de todas as vendas de tokens realizadas nos últimos dois anos”.
+ “Na verdade, a linguagem é idêntica a de outros pedidos”, acrescentou. “As notas de rodapé são idênticas. Eu diria que definitivamente parece um modelo que se estabelece aos poucos.”
+ Ainda no dia 16, a própria SEC publicou um 
+ comunicado
+  explicando seu roteiro para regulamentar as ofertas iniciais de moedas (ICOs) e também exchanges, plataformas de negociação do mercado secundário e outras entidades que possam realizar transações de tokens.
+ Talvez mais notavelmente, o regulador dos EUA declarou que “há um caminho para o cumprimento das leis federais de valores mobiliários” para startups que emitem tokens, mesmo que “os emissores já tenham conduzido uma oferta ilegal não registrada de títulos de ativos digitais”.
+ Ou seja, mesmo quem realizou uma ICO antes das novas regras da SEC poderá, segundo a própria Comissão, voltar a se enquadrar na lei.
+ Palley destacou que os pedidos de sexta-feira foram realizados “por meio de uma análise bem padronizada de Howey”, referindo-se ao teste de três frentes usado para determinar se um objeto oferecido para venda se qualifica como um garantia.
+ O teste Howey, especificamente, procura um investimento de dinheiro em uma empresa comum, o que significa que mais de uma parte tem fundos atrelados ao empreendimento e a uma expectativa de lucro, disse Casey Jennings, um associado sênior do escritório de advocacia Seward & Kissel LLP.
+ É importante notar, observou Palley, enquanto os pedidos anteriores contra startups da ICO incluíam alegações de fraude ou erros semelhantes, o anúncio de sexta-feira não o fez.
+ Para as empresas preocupadas com a possibilidade de violar a lei de valores mobiliários, Palley recomenda o check-in com um advogado. Carter foi um passo além, aconselhando as empresas a se afastarem de seus tokens imediatamente:
+ “Meu conselho para todos os ICOs seria sair à frente do jogo e fechar seu negócio, remover o token, recuperar todo o dinheiro de volta e seguir um modelo de negócios normal que não requer um token.”
+ A SEC tem aumentado seus esforços ao cobrar ou liquidar as acusações com diferentes startups, observou Palley.
+ Anthony Tu-Sekine, sócio da Seward & Kissel, concordou, observando que a SEC “aumentou o volume” de suas ações.
+ O relatório do caso DAO, por exemplo, descreveu as opiniões da SEC, mas não tomou nenhuma medida contra a organização, embora isso possa ter ocorrido em parte porque o DAO já havia reembolsado os investidores, disse ele.
+ “Dessa vez, eles (os reguladores) estão apertando o cerco”, disse Tu-Sekine.
+ A declaração da SEC na sexta-feira recomendou que as startups que emitiram ICOs entrem em contato com a assessoria jurídica, bem como com o próprio regulador através de seu projeto FinHub.
+ Na verdade, reembolsar investidores pode ser um problema para alguns projetos. Carter observou que a Paragon e a Airfox eram capazes de fornecer uma rescisão completa aos seus investidores, mas nem todas as empresas que lançaram ICOs serão capazes de fazer isso.
+ Mesmo startups que mantiveram todos os tokens que levantaram durante suas vendas terão perdido dinheiro em termos de dólar americano devido a baixa no mercado, observou, o que significa que podem ter dificuldades em pagar os investidores.
+ Do ponto de vista de um investidor, Carter observou: “o que importa é que a noção de uma ICO foi bastante confundida como um método de captação de recursos, e agora podemos voltar a coisas que fazem sentido para os investidores.” Ele concluiu:
+ “Eu acho que vai levar o mercado um tempo para perceber que a festa das ICOs acabou, mas ela realmente acabou.”
+
