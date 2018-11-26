@@ -247,12 +247,39 @@ public class Main {
             rel.filterRelevantRelations(wp,classifiedEntities);
         }*/
 
+
         Set<Triple<String,String,String>> s = rel.filterBySubject(np,classifiedEntities);
-        for(Triple t : s){
-            System.out.println(t);
-            rel.identifySubject(((String) t.first),np);
+        s= rel.filterByVerb(np,s);
+        Map< String , Pair<String,String>>  subjects = new HashMap<>();
+        Map< String , Set<Pair<String,String>>>  preds = new HashMap<>();
+        for(Triple<String,String,String> t : s){
+            //System.out.println("relevant triples" + t);
+            Pair p = rel.identifySubject( t.first, np);
+            if (p!=null){
+                subjects.put(t.first, p );
+            }
+            Set se = rel.identifyPred(np  , t.third);
+            if (se.size()>0){
+                preds.put(t.third,se );
+            }
         }
-        
+        for(Triple<String,String,String> t : s){
+            System.out.println("Useful triple -> "+ t );
+            if (subjects.containsKey(t.first)&& preds.containsKey(t.third)){
+               // System.out.println( "    corresponding transformed triple " + subjects.get(t.first).getKey() + " " + t.second + " " + ((Pair )(preds.get(t.third).toArray()[0])).getKey() );
+                rel.classifyTriple(t, subjects.get(t.first), preds.get(t.third));
+            }
+        //    else
+         //       System.out.println("    Inutil: Suj? " + subjects.containsKey(t.first) + "Pred? "+  preds.containsKey(t.third) );
+
+
+        }
+
+
+        // x.putAll(rel.filterByVerb(np, s));
+
+
+
         //rel.filterRelevantRelations(np,classifiedEntities);
 
         

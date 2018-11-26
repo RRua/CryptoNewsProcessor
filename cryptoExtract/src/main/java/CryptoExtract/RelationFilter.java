@@ -3,17 +3,24 @@ package CryptoExtract;
 import Utils.Contraction;
 import javafx.util.Pair;
 
+import javax.print.attribute.standard.JobStateReasons;
 import java.util.*;
 
 public class RelationFilter {
 
     public static Map<String,String> usefulRelations = new HashMap<>(); // lemmatized // relation -> Ontology relation
     public static Map<String,String> usefulCaracteristic = new HashMap<>(); // lemmatized // relation -> Ontology relation
+    public static Map<String,String> truncatedEvents = new HashMap<>();
     //public static Set<String> issueCaracteristic = new HashSet<>(); // lemmatized // relation -> Ontology relation
     //public static Set<String> coinCaracteristic = new HashSet<>(); // lemmatized // relation -> Ontology relation
     public  Map<String,String> entitiesMap = new HashMap<>(); // contains all entities and sinonyms
     public static BaseKnowledge base = null;
     public String lastEntity = null;
+    public  Map<String,String> classifiedEntities = new HashMap<>();
+    public String [] auxVerb = {"ser","estar", "ter", "haver","querer", "dever", "poder","conseguir",
+        "pretender", "chegar", "tentar", "continuar", "começar" , "costumar" , "ir", "vir", "voltar",
+            "tornar", "andar", "deixar" , "acabar", };
+
 
     public RelationFilter( BaseKnowledge b){
        //usefulRelations.add("");
@@ -22,7 +29,6 @@ public class RelationFilter {
        usefulRelations.put("ser", "instanceOf");
        usefulRelations.put("ser um", "instanceOf");
        usefulRelations.put("fazer", "did");
-
        usefulRelations.put("dizer", "said");
        usefulRelations.put("declarar", "said");
        usefulRelations.put("afirmar", "said");
@@ -41,32 +47,52 @@ public class RelationFilter {
         usefulRelations.put("servir", "said");
         usefulRelations.put("publicar", "said");
 
-
+        usefulRelations.put("conter", "has");
         usefulRelations.put("ter", "has");
         usefulRelations.put("possuir", "has");
 
         usefulRelations.put("usar", "Action");
+        truncatedEvents.put("us(a|o).*", "Action");
         usefulRelations.put("adoptar", "Action");
-
+        truncatedEvents.put("adopt(a|o).*", "Action");
         usefulRelations.put("subir", "State");
+        truncatedEvents.put("subi.*", "State");
         usefulRelations.put("descer", "State");
+        truncatedEvents.put("des(c|ç).*", "State");
         usefulRelations.put("cair", "State");
+        truncatedEvents.put("cai(a|u).*", "State");
         usefulRelations.put("baixar", "State");
+        truncatedEvents.put("baix.*", "State");
         usefulRelations.put("descender", "State");
+        truncatedEvents.put("descend.*", "State");
         usefulRelations.put("comprar", "Action");
+        truncatedEvents.put("compr.*", "Action");
         usefulRelations.put("vender", "Action");
+        truncatedEvents.put("vend.*", "Action");
         usefulRelations.put("ascender", "State");
+        truncatedEvents.put("ascend.*", "State");
         usefulRelations.put("diminuir", "State");
+        truncatedEvents.put("diminu.*", "State");
         usefulRelations.put("aumentar", "State");
+        truncatedEvents.put("aument.*", "State");
         usefulRelations.put("estar", "State");
+        truncatedEvents.put("est.*", "State");
         usefulRelations.put("manter", "State");
+        truncatedEvents.put("mante.*", "State");
         usefulRelations.put("estabilizar", "State");
+        truncatedEvents.put("estabiliz(a|o|e).*", "State");
         usefulRelations.put("adquirir", "Action");
+        truncatedEvents.put("adquir.*", "Action");
         usefulRelations.put("queda", "State");
         usefulRelations.put("subida", "State");
+        usefulRelations.put("subir", "State");
+        truncatedEvents.put("sub.*", "State");
         usefulRelations.put("investir", "Action");
+        truncatedEvents.put("invest.*", "Action");
         usefulRelations.put("negociar", "Action");
+        truncatedEvents.put("negoci.*", "Action");
         usefulRelations.put("transacionar", "Action");
+        truncatedEvents.put("transacion.*", "Action");
 
 
        usefulCaracteristic.put("programador","Person");
@@ -97,8 +123,8 @@ public class RelationFilter {
 
         usefulCaracteristic.put("vulnerabilidade","Issue");
         usefulCaracteristic.put("problema","Issue");
-        usefulCaracteristic.put("atacar","Issue");
         usefulCaracteristic.put("ataque","Issue");
+        usefulCaracteristic.put("atacar","Issue");
         usefulCaracteristic.put("malicioso","Issue");
         usefulCaracteristic.put("malicia","Issue");
         usefulCaracteristic.put("falhar","Issue");
@@ -130,31 +156,31 @@ public class RelationFilter {
 
     public void init(Map<String, String> relevantEntities) { // relevantEntities = [(entity name, type)]
        Map<String,String> spa = new HashMap<>();
-        for (String p : relevantEntities.keySet()){
-            if (relevantEntities.get(p).equals("Person")|| relevantEntities.get(p).equals("Organization")){
-                String [] sp = ((String) p).replaceAll("@","_").split("_");
-                entitiesMap.put(((String) p).replace("de_a", "da").replace("de_as", "das").replace("de_o","do").replace("de_os", "dos"), ((String) p));
+        for (String type : relevantEntities.keySet()){
+            if (relevantEntities.get(type).equals("Person")|| relevantEntities.get(type).equals("Organization")){
+                String [] sp = ((String) type).replaceAll("@","_").split("_");
+                entitiesMap.put(((String) type).replace("de_a", "da").replace("de_as", "das").replace("de_o","do").replace("de_os", "dos"), ((String) type));
                 for ( String s : sp){
                     if (s.equals("de") || Contraction.linguakit_contractions.containsKey(s)){
                         continue;
                     }
                     if (s.length()>1){
-                        entitiesMap.put(s,  p);
-                        spa.putIfAbsent(s,  relevantEntities.get(p));
+                        entitiesMap.put(s,  type);
+                        spa.putIfAbsent(s,  relevantEntities.get(type));
                     }
 
                 }
             }
             else {
-                if (p.length()>1){
-                    entitiesMap.put(((String) p), ((String) p));
-                    spa.putIfAbsent(p,  relevantEntities.get(p));
+                if (type.length()>1){
+                    entitiesMap.put(((String) type), ((String) type));
+                    spa.putIfAbsent(type,  relevantEntities.get(type));
                 }
 
             }
-
         }
         relevantEntities.putAll(spa);
+        this.classifiedEntities =relevantEntities;
     }
 
 
@@ -176,7 +202,7 @@ public class RelationFilter {
        String entitySubject = p.getKey();
        boolean relSubj = subj.toLowerCase().matches("(el(e|a)(s)?)|(est(e|a)(s)?)");
        if (p.getValue().equals("Person")|| relSubj){ // is person
-           if(relSubj){
+           if(relSubj&&p.getValue().equals("Person")){
                entitySubject = lastEntity;
            }
            Set<String> set = this.inferRelationship(rel,pred,"Person", entitySubject,tp);
@@ -189,7 +215,9 @@ public class RelationFilter {
                    return (new Triple<>(entitySubject , usefulRelations.get(rel), s));
                }
            }
-           lastEntity=entitySubject;
+           if (p.getValue().equals("Person")){
+               lastEntity=entitySubject;
+           }
        }
        else {
            Set<String> set = this.inferRelationship(rel,pred, p.getValue(), entitySubject,tp);
@@ -236,13 +264,50 @@ public class RelationFilter {
         return l2;
    }*/
 
+
     public Set<Triple<String,String,String>> filterByVerb(TextProcessor tp,  Collection<Triple<String,String,String>> triples){
         Set<Triple<String,String,String>> l2 = new HashSet<>();
         for (Triple<String,String,String> triple : triples){
+            String rel = triple.second;
+            String verb = tp.getVerbOfProcessedSentence(rel);
+            if (verb==null){ // tentar corrigir
+                if (containsAuxVerb(verb)){
+                    verb = rel;
+                    //System.out.println(" ulha o verbo  de " + rel+ " -> " + verb);
+                    HashSet<String> set = new HashSet();
+                    Triple<String,String,String> tt = new Triple<>(triple.first, verb, triple.third );
+                    l2.add(tt);
 
+                }
+                else{
+                    continue;
+                }
+            }
+            else{ // OK
+                //System.out.println(" ulha o verbo  de " + rel+ " -> " +verb);
+                Triple<String,String,String> tt = new Triple<>(triple.first, verb, triple.third );
+                l2.add(tt);
+            }
         }
 
-
+        // process l2 to remove unwanted relations
+        Set<Triple<String,String,String>> ret = new HashSet<>();
+        for (Triple<String,String,String> t : l2){
+            String [] split = t.second.split(" ");
+            if (split.length>1){ // 2 verbs
+                String mainVerb = split[1];
+                if (usefulRelations.containsKey(mainVerb)){
+                    Triple<String,String,String> tt = new Triple<>(t.first, usefulRelations.get(mainVerb), t.third );
+                    ret.add(tt);
+                }
+            }
+            else { // only one verb
+                if (usefulRelations.containsKey(t.second)){
+                    Triple<String,String,String> tt = new Triple<>(t.first, usefulRelations.get(t.second), t.third );
+                    ret.add(tt);
+                }
+            }
+        }
         return l2;
     }
 
@@ -264,12 +329,12 @@ public class RelationFilter {
 
            for ( String pair : relevantEntities.keySet() ){
                if (subj.toLowerCase().equals(pair.toLowerCase())|| subj.toLowerCase().matches(pair.toLowerCase()) || pair.toLowerCase().matches(subj.toLowerCase())|| subj.replaceAll("_","").contains(pair.replaceAll("_","")) ){
-                   return new Pair<>(subj,relevantEntities.get(pair));
+                   return new Pair<>(subj,classifiedEntities.get(pair));
                }
            }
            for ( String pair : entitiesMap.keySet() ){
                if (subj.toLowerCase().equals(pair.toLowerCase())|| subj.toLowerCase().matches(pair.toLowerCase()) || pair.toLowerCase().matches(subj.toLowerCase())|| subj.replaceAll("_","").contains(pair.replaceAll("_",""))){
-                   return new Pair<>(subj,relevantEntities.get(pair));
+                   return new Pair<>(subj,classifiedEntities.get(pair));
                }
            }
            if (usefulCaracteristic.containsKey(subj)){
@@ -357,7 +422,10 @@ public class RelationFilter {
          return null;
         }
         for (String word : sentence.split(" ")){
-            if(verb.equals(tp.getLemmaAndTagOfProcessedWord(word).getKey())){
+            if(verb.startsWith(word)){
+                continue;
+            }
+            else if(verb.endsWith(tp.getLemmaAndTagOfProcessedWord(word).getKey())){
                 verbFound=true;
             }
             if(!verbFound){
@@ -371,6 +439,54 @@ public class RelationFilter {
     }
 
     // returns subject of relation ( can be simple or composed ( John ,users of system)
+    /*
+    public Map< Triple<String,String,String> , Triple<String,String,Set<String>>> identifySubject( Collection<Triple<String,String,String>> col, TextProcessor tp){
+        Map< Triple<String,String,String> , Triple<String,String,Set<String>>> possibleSubjs = new HashMap<>();
+        OntologyMapper om = new OntologyMapper();
+        for( Triple<String,String,String> tsubj : col){
+            String subj = tsubj.first;
+            Pair<String,String> pair = null;
+            String [] arrayOfWords = subj.split(" ");
+            for (String word : arrayOfWords){
+                //String typeOfWord = tp.getLemmaAndTagOfProcessedWord(word).getValue();
+                pair = subjectIsEntity(entitiesMap,word,tp);
+                if(pair!=null){
+                    if (base.isType(pair.getValue())){ // se é um tipo considerado
+                        possibleSubjs.put( tsubj ,new Triple<String, String, Set<String>>(pair.getValue(), null,new HashSet<>()));
+                    }
+                    else { // entao é uma entidade detetada
+                        System.out.println(" nao xei o tipo do " + pair.getValue());
+                        //possibleSubjs.add(new Triple<>(word,pair.getKey(), entitiesMap.get(pair.getKey())));
+                        //possibleSubjs.put( tsubj ,new Triple<String, String, Set<String>>(pair.getValue(), null,new HashSet<>()));
+                    }
+                }
+            }
+
+            if(possibleSubjs.size()==1){
+                // System.out.println(" So 1 sub " + possibleSubjs.get(0));
+                // om.prepareSubjectToOntology(possibleSubjs,"");
+                // TODO uncomment
+            }
+            else if (possibleSubjs.size()==2) { // try to understand the composed subject
+                if (subj.matches(".*" +possibleSubjs.get(0).first + "\\ (de)\\ (a|o)(s)?\\ " + possibleSubjs.get(1).first + ".*")){
+                    // e.g usuarios de facebook
+                    // System.out.println("sub 0" +possibleSubjs.get(0));
+                    // System.out.println(" sub 1 " +possibleSubjs.get(1));
+                    // om.prepareSubjectToOntology(possibleSubjs,"de");
+                    //TODO uncomment
+                }
+            }
+
+
+
+
+
+        }
+
+        return possibleSubjs;
+    }*/
+
+    // returns  real subject  and type ( pair ( real subj, type) )  ( SuBJ can be simple or composed ( John ,users of system)
     public Pair<String,String> identifySubject(String subj, TextProcessor tp){
         List<Pair<String,String>> possibleSubjs = new ArrayList<>();
         Pair<String,String> pair = null;
@@ -378,23 +494,199 @@ public class RelationFilter {
         for (String word : arrayOfWords){
             //String typeOfWord = tp.getLemmaAndTagOfProcessedWord(word).getValue();
             pair = subjectIsEntity(entitiesMap,word,tp);
+
             if(pair!=null){
-                possibleSubjs.add(new Pair<>(word, pair.getValue()));
+                if (base.isType(pair.getValue())){ // se é um tipo considerado
+                    possibleSubjs.add(new Pair<>(word, pair.getValue()));
+                }
             }
         }
 
         if(possibleSubjs.size()==1){
-            System.out.println(" So 1 sub " + possibleSubjs.get(0));
-            return possibleSubjs.get(0);
+            //System.out.println(" So 1 sub " + possibleSubjs.get(0));
+            // om.prepareSubjectToOntology(possibleSubjs,"");
+            return possibleSubjs.get(0); // (type, real subj)
         }
         else if (possibleSubjs.size()==2) { // try to understand the composed subject
             if (subj.matches(".*" +possibleSubjs.get(0).getKey() + "\\ (de)\\ (a|o)(s)?\\ " + possibleSubjs.get(1).getKey() + ".*")){
                 // e.g usuarios de facebook
-                System.out.println("sub 0" +possibleSubjs.get(0));
-                System.out.println(" sub 1 " +possibleSubjs.get(1));
+                //System.out.println("sub 0" +possibleSubjs.get(0));
+                //System.out.println(" sub 1 " +possibleSubjs.get(1));
+                // om.prepareSubjectToOntology(possibleSubjs,"de");
+                return new Pair<>(possibleSubjs.get(0).getKey() + " " + possibleSubjs.get(1).getKey(), possibleSubjs.get(0).getValue() );
             }
         }
         return null;
+    }
+
+
+
+    // returns pairs (real  pred, type)
+    public Set<Pair<String,String>> identifyPred ( TextProcessor tp, String sub){
+        Set<Pair<String,String>> set = new HashSet<>();
+        for (String word : sub.split(" ")){
+            // check if is an useful characteristic or an entity
+            Pair p = tp.getLemmaAndTagOfProcessedWord(word);
+            if (p==null){
+                System.out.println("Error identifying pred in word " + word);
+                continue;
+            }
+            else{
+                String s = ((String) p.getKey());
+                if ( usefulCaracteristic.containsKey(s.toLowerCase())){
+                    set.add(new Pair<>(word, usefulCaracteristic.get(s.toLowerCase())));
+                }
+                else if (classifiedEntities.containsKey(s.toLowerCase())){
+                    if ( ! classifiedEntities.get(s.toLowerCase()).equals("Thing")){
+                        set.add(new Pair<>(word, classifiedEntities.get(s.toLowerCase())));
+                    }
+
+                }
+                else if ( usefulRelations.containsKey(s.toLowerCase())){
+                    set.add(new Pair<>(word, usefulRelations.get(s.toLowerCase())));
+                }
+                else {
+                    String smatch = matchEvent(s);
+                    if( smatch!=null){
+                        set.add(new Pair<>(s, usefulRelations.get(smatch)));
+                    }
+                }
+            }
+        }
+        return set;
+    }
+
+
+    // classification like (Person ,Said, Statement)
+    public Triple<String,String,String> classifyTriple( Triple<String,String,String> original_Triple , Pair<String,String> subjPair, Set<Pair<String,String>> predPair  ){
+        String retFirst = null, retSecond=null, retThird = null;
+        String verb = original_Triple.second;
+        String relationOfVerb = usefulRelations.get(verb);
+        if (relationOfVerb!=null){
+            retFirst=subjPair.getKey();
+            retSecond=relationOfVerb;
+            if (relationSubjVerbMakesSense(retFirst,retSecond)){
+                if (retSecond.equals("said")){
+                    return new Triple<>(retFirst,retSecond, "Statement");
+                }
+            }
+
+        }
+        return new Triple<>(retFirst,retSecond,retThird);
+    }
+
+
+    public boolean relationSubjVerbMakesSense(String subjtype, String relType){
+        if (subjtype.equals("Person")){
+            if (relType.equals("said")){
+                return true;
+            }
+            else if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+        }
+        else if (subjtype.equals("Organization")){
+            if (relType.equals("said")){
+                return true;
+            }
+            else if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+        }
+        if (subjtype.equals("Currency")){
+            if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+        }
+        if (subjtype.equals("Statement")){
+            if (relType.equals("said")){
+                return true;
+            }
+            else if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+        }
+        if (subjtype.equals("Person")){
+            if (relType.equals("said")){
+                return true;
+            }
+            else if (relType.equals("did")){
+                return true;
+            }
+            else if (relType.equals("has")){
+                return true;
+            }
+            else if (relType.equals("Action")){
+                return true;
+            }
+            else if (relType.equals("State")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public String matchEvent(String possibleEv){
+        for (String st :  truncatedEvents.keySet()){
+            if (possibleEv.matches(st)){
+                for (String s : usefulRelations.keySet()){
+                    if(s.matches(st)){
+                        return s;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean containsAuxVerb(String normalizedVerb){
+        for (String s : auxVerb){
+            if (normalizedVerb==null){
+                continue;
+            }
+            if (normalizedVerb.contains(s)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

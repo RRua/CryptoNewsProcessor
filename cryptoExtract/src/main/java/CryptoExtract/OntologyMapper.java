@@ -8,6 +8,7 @@ public class OntologyMapper {
 
     public Map<String, Pair<String,String>> mapPersonRelated = new HashMap<>(); // Pairt (rdf:type, dataProperty   )
     public Map<String, Pair<String,String>> mapIssueRelated = new HashMap<>();
+    public Map<String, Pair<String,String>> mapEventRelated = new HashMap<>();
 
     /*
 
@@ -22,7 +23,6 @@ public class OntologyMapper {
         usefulCaracteristic.put("invadir","Issue");
         usefulCaracteristic.put("invasor","Issue");
         usefulCaracteristic.put("problema","Issue");
-
 
      */
 
@@ -65,6 +65,21 @@ public class OntologyMapper {
 
     }
 
+    public Pair<String,String> mapGets( String obj){
+        if (mapPersonRelated.containsKey(obj)){
+            return mapPersonRelated.get(obj);
+        }
+        if (mapIssueRelated.containsKey(obj)){
+            return mapIssueRelated.get(obj);
+        }
+        if (mapIssueRelated.containsKey(obj)){
+            return mapIssueRelated.get(obj);
+        }
+        return null;
+    }
+
+
+
     public String getInstance (String id, String rel, Iterable<String> types ){
         String batata = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
@@ -79,35 +94,58 @@ public class OntologyMapper {
     }
 
 
-    // list of pairs (subj, type)
-    public void prepareSubjectToOntology(List<Pair<String,String>> subjects){
+    // list of triple (subj, lemma,type)
+    public void prepareSubjectToOntology(List<Triple<String,String,String>> subjects, String relBetween){
         if (subjects.size()==1){ // simple subject
-            if (subjects.get(0).getValue().equals("Person")){
-                Pair<String,String> p = mapPersonRelated.get(subjects.get(0).getKey());
-                List<String> l = new ArrayList<>();
-                l.add("Person");
-                System.out.println(getInstance(subjects.get(0).getKey(), "rdf:type" , l ));
-                l.remove(0);
-                l.add(p.getValue());
-                System.out.println(getInstance(subjects.get(0).getKey(), "crypto:Of" , l ));
-            }
-            else if (subjects.get(0).getValue().equals("Issue"))  {
-                System.out.println("nada");
-            }
 
-            else if (subjects.get(0).getValue().equals("Currency"))  {
-                System.out.println("nada");
-            }
-            else if (subjects.get(0).getValue().equals("Organization"))  {
-                System.out.println("nada");
-            }
-            else {
-                System.out.println("nada");
-            }
+                Pair<String,String> p = mapGets(subjects.get(0).second);
+                if (p==null){ // is currency or other
+                    List<String> l = new ArrayList<>();
+                    l.add(subjects.get(0).third);
+                    System.out.println(getInstance(subjects.get(0).second, "rdf:type" , l ));
+                    l.remove(0);
+                    //l.add(p.getValue());
+                    //System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // data property
+
+                }
+                else{
+                    List<String> l = new ArrayList<>();
+                    l.add(p.getKey());
+                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
+                    l.remove(0);
+                    l.add(p.getValue());
+                    System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // data property
+                }
+
+
 
         }
         else if (subjects.size()==2){ // composed subject ( e.g investidores de bitcoin
-            
+            if (relBetween.equals("de")){ // OF
+                    Pair<String,String> p = mapGets(subjects.get(0).second);
+                if (p==null){
+                    List<String> l = new ArrayList<>();
+                    l.add(subjects.get(0).third);
+                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
+                    l.remove(0);
+                   // l.add(p.getValue());
+                   // System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // object property
+                   // l.remove(0);
+                    l.add((subjects.get(1).second ));
+                    System.out.println(getInstance(subjects.get(0).first, "owl:Of" , l )); // object property
+                }
+                else{
+                    List<String> l = new ArrayList<>();
+                    l.add(p.getKey());
+                    System.out.println(getInstance(subjects.get(0).first, "rdf:type" , l ));
+                    l.remove(0);
+                    l.add(p.getValue());
+                    System.out.println(getInstance(subjects.get(0).first, "owl:instanceOf" , l )); // object property
+                    l.remove(0);
+                    l.add((subjects.get(1).second ));
+                    System.out.println(getInstance(subjects.get(0).first, "owl:Of" , l )); // object property
+                }
+            }
         }
     }
 

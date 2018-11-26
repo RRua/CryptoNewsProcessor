@@ -345,18 +345,30 @@ public class WikiPediaProcessor implements TextProcessor {
         String [] ss = sent.split(" ");
         for (int i = 0; i <ss.length ; i++) {
             String s= ss[i];
-            Pair<String,String> p = getLemmaAndTagOfProcessedWord(s);
-            if (p==null){
+            if (s.contains("_")){
                 continue;
             }
-            if (p.getValue().startsWith("V")){
+            Pair<String,String> p = getLemmaAndTagOfProcessedWord(s);
+            if (p!=null && p.getValue().startsWith("V")){
                 // ITS A VERB
+                boolean moreVerbs = false;
+                String otherVerb= null;
                 if (i+1<ss.length){ // check if following word is also a verb // e.g "será feito"
-                    String s2 = ss[i+1];
-                    Pair<String,String> p2 = getLemmaAndTagOfProcessedWord(s2);
-                    if (p2.getValue().startsWith("V")){
-                        //
-                        return p2.getKey();
+                    for (int j = i+1; j < ss.length; j++) {
+                        String s2 = ss[j];
+                        if (!s2.contains("_")){
+                            Pair<String, String> p2 = getLemmaAndTagOfProcessedWord(s2);
+                            if (p2.getValue().startsWith("V")) {
+                                moreVerbs=true;
+                                otherVerb=p2.getKey();
+                            }
+                        }
+                    }
+                    if (moreVerbs){
+                        return p.getKey() + " " + otherVerb;
+                    }
+                    else{
+                        return p.getKey();
                     }
                 }
                 else {

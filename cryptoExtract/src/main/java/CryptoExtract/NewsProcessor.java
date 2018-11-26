@@ -431,15 +431,24 @@ public class NewsProcessor implements TextProcessor {
             Pair<String,String> p = getLemmaAndTagOfProcessedWord(s);
             if (p!=null && p.getValue().startsWith("V")){
                 // ITS A VERB
+                boolean moreVerbs = false;
+                String otherVerb= null;
                 if (i+1<ss.length){ // check if following word is also a verb // e.g "será feito"
-                    String s2 = ss[i+1];
-                    if (s2.contains("_")){
-                    }
-                    else {
-                        Pair<String, String> p2 = getLemmaAndTagOfProcessedWord(s2);
-                        if (p2.getValue().startsWith("V")) {
-                            return p2.getKey();
+                    for (int j = i+1; j < ss.length; j++) {
+                        String s2 = ss[j];
+                        if (!s2.contains("_")){
+                            Pair<String, String> p2 = getLemmaAndTagOfProcessedWord(s2);
+                            if (p2!=null && p2.getValue().startsWith("V")) {
+                                moreVerbs=true;
+                                otherVerb=p2.getKey();
+                            }
                         }
+                    }
+                    if (moreVerbs){
+                        return p.getKey() + " " + otherVerb;
+                    }
+                    else{
+                        return p.getKey();
                     }
                 }
                 else {

@@ -26,6 +26,8 @@ public class BaseKnowledge {
     public OrganizationGazeteer organizationGazeteer = new OrganizationGazeteer();
 
     public static Map<String,String > cache = new HashMap<>();
+    public static String [] consideredTypes = {"Currency", "Organization", "System", "Location", "Issue",
+            "Person", "CryptoCurrency", "Number", "Thing", "Date", "HOUR", "PERCENTAGE", "Statement" , "Action", "Event", "State", "Sentiment"};
 
 
     public BaseKnowledge(String ontoPath){
@@ -60,6 +62,8 @@ public class BaseKnowledge {
         cache.put("Binance".toLowerCase(),"Organization");
         cache.put("P2P".toLowerCase(),"Cryptocurrency");
         cache.put("etoro".toLowerCase(),"Organization");
+        cache.put("CFDs".toLowerCase(), "Currency");
+        cache.put("CFD".toLowerCase(), "Currency");
         //cache.put("hashrate".toLowerCase(),"Cryptocurrency");
 
     }
@@ -161,6 +165,15 @@ public class BaseKnowledge {
             return "Currency";
         }
         else return null;
+    }
+
+    public boolean isType(String possibleType){
+        for(String s : consideredTypes){
+            if (s.toLowerCase().equals(possibleType.toLowerCase())){
+                return true;
+            }
+        }
+        return false;
     }
 
 
