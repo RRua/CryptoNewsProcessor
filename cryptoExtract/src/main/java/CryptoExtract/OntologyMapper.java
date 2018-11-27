@@ -110,7 +110,7 @@ public class OntologyMapper {
                     //    System.out.println(getInstance(subj.first, "rdf:type" , p.getKey() ));
                     relationsToSend.add(new Triple<>(subj.first,"rdf:type", p.getKey()) );
                     //    System.out.println(getInstance(subj.first, "owl:instanceOf" , p.getValue() )); // data property
-                    relationsToSend.add(new Triple<>(subj.first,"owl:instanceOf", p.getValue()) );
+                    relationsToSend.add(new Triple<>(subj.first,"rdf:type", p.getValue()) );
                 }
 
 
@@ -130,9 +130,9 @@ public class OntologyMapper {
                     //System.out.println(getInstance(subjects[1], "rdf:type" , p.getKey()));
                     relationsToSend.add(new Triple<>(subjects[1],"rdf:type", p.getKey()) );
                   //  System.out.println(getInstance(subjects[1], "owl:instanceOf" , p.getValue() )); // object property
-                    relationsToSend.add(new Triple<>(subjects[1],"owl:instanceOf",p.getValue()) );
+                    relationsToSend.add(new Triple<>(subjects[1],"rdf:type",p.getValue()) );
                     //   System.out.println(getInstance(subjects[1], "owl:Of" , subj.second )); // object property
-                    relationsToSend.add(new Triple<>(subjects[1],"owl:instanceOf",subj.second) );
+                    relationsToSend.add(new Triple<>(subjects[1],"rdf:type",subj.second) );
                 }
             }
         }
@@ -163,9 +163,23 @@ public class OntologyMapper {
             }
 
         }
+        else if (classifiedTriple.second.equals("instanceOf")){
+            for (Pair<String,String> p : related){
+                Pair<String,String> p2 = mapGets(p.getKey());
+                if (p2!=null&& p2.getKey().equals(p.getValue()) ){
+                    String realName = p2.getValue();
+                    relationsToSend.add(new Triple<>(classifiedTriple.first, "rdf:type", realName ));
+                }
+
+            }
+
+        }
         else {
             String mat = rel.matchEvent(classifiedTriple.second);
-            if (rel.usefulRelations.get(mat).equals("Action")){
+            if (mat==null){
+                return;
+            }
+            else if (rel.usefulRelations.get(mat).equals("Action")){
                 //       System.out.println(getInstance( classifiedTriple.second, "rdf:type" , "Action" ));
                 relationsToSend.add(new Triple<>(classifiedTriple.second,"rdf:type", "Action") );
                 //       System.out.println(getInstance( classifiedTriple.first.replaceAll(" ", "_"), "owl:"+classifiedTriple.second , classifiedTriple.third ));

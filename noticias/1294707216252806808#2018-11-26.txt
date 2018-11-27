@@ -1,0 +1,21 @@
+ As pessoas que compraram ou receberam os tokens 
+ Anti Bureaucracy Coin
+  (ABC) da 
+ OriginalMy
+  terão um excelente benefício a partir desta segunda-feira, 26 de novembro. Edilson Osório, CEO da empresa, anunciou com exclusividade ao Criptomoedas Fácil o lançamento de um novo benefício para os detentores do token.
+ Segundo Osório, hoje (26/11), às 18:00 (horário de Brasília), a OriginalMy terá uma nova funcionalidade que dará aos holders do ABC descontos progressivos de acordo com a quantidade que eles possuem.
+ “Mantendo o nosso padrão de provar a autenticidade de tudo sem termos nada guardado conosco, vamos dar descontos progressivos no uso da plataforma para quem tiver ABCs guardados na hora de pagar pelo uso dos serviços da OriginalMy”, afirmou.
+ Atualmente, a plataforma da OriginalMy já possui uma promoção que dá 70% de desconto para quem usar o ABC como pagamento por registros de documentos e assinatura de contratos. Com esse novo desconto, a OriginalMy traz um incentivo a mais para quem deseja guardar o token para o longo prazo, premiando os poupadores.
+ “Sempre quisemos dar um benefício para quem fizer holder do ABC. Além disso, temos a preocupação de provar a autenticidade de dados e documentos sem precisar salvar nada conosco. Por isso, lançamos uma forma de desconto via Proof of Stake onde o usuário não precisa enviar os tokens para nenhum lugar”, ressaltou Osório.
+ Para ter acesso ao desconto, o usuário precisa ter uma conta na 
+ Metamask
+ . Esta é uma das carteiras mais conhecidas para Ethereum, desenvolvida pela ConsenSys. A verificação do saldo é feita através de um 
+ plug-in
+  da MetaMask, instalado no navegador pessoal (
+ Chrome
+  ou Brave), que importa o saldo da carteira. Na hora do pagamento no site da OriginalMy, ele verifica se o plug-in está instalado e lê o saldo da pessoa em ABC. Ao ver o saldo, ela dá um desconto progressivo de acordo com o saldo que se tem em carteira.
+ O grande diferencial é que o tanto o plug-in quanto o site da OriginalMy não têm acesso às chaves privadas do usuário. Assim como no registro de documentos e contratos, o acesso na MetaMask é concedido apenas para leitura do saldo e cálculo do desconto.
+ O valor do stake necessário para cada desconto será ancorado no dólar, em um primeiro momento. Segundo Osório, o valor fixado para obter 100% de desconto ficou em US$5.000 – que hoje equivale a cerca de 250.000 ABC. No entanto, ele afirmou que a empresa ainda estuda os valores e porcentagem para os demais descontos.
+ O desconto do Proof of Stake será cumulativo com os 70% de desconto no valor dos registros: quem fizer o pagamento com o token receberá os 70% mais o desconto equivalente ao seu stake. E quem fizer o pagamento por outros meios, terá o desconto equivalente a quantidade de ABCs que possui. O desconto será válido para todos os serviços, exceto os que tem vínculo com registro em cartório.
+ Para obter o desconto, basta que o usuário acesse o site da OriginalMy e utilize algum serviço. Ao chegar na tela de pagamento, o site pedirá para ler o saldo do cliente na MetaMask e conferir a quantidade de ABC na carteira. Feito isso, o usuário receberá o desconto de acordo com a quantidade de tokens que possui. O pagamento dos serviços da OriginalMy podem ser feitos via PagSeguro, criptomoedas ou pelo token ABC.
+

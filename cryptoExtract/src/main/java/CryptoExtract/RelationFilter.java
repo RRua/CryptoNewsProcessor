@@ -31,15 +31,17 @@ public class RelationFilter {
         usefulNames.put("pre(c|ç).*", "Price");
         usefulNames.put("val(i|o).*", "Value");
         usefulNames.put("hashrate.*", "Value");
-        usefulAdjectives.put("baix.*", "Decrease");
-        usefulAdjectives.put("subi.*", "Increase");
-        usefulAdjectives.put("dimin.*", "Decrease");
-        usefulAdjectives.put("aument.*", "Increase");
-        usefulAdjectives.put("ca(i|í)*", "Decrease");
-        usefulAdjectives.put("levant.*", "Increase");
+        usefulAdjectives.put("baix.*", "Decreased");
+        usefulAdjectives.put("subi.*", "Increased");
+        usefulAdjectives.put("dimin.*", "Decreased");
+        usefulAdjectives.put("aument.*", "Increased");
+        usefulAdjectives.put("ca(i|í)*", "Decreased");
+        usefulAdjectives.put("levant.*", "Increased");
         usefulAdjectives.put("mant.*", "Neutral");
         usefulAdjectives.put("estabil.*", "Neutral");
-        usefulAdjectives.put("ascend.*", "Increase");
+        usefulAdjectives.put("ascend.*", "Increased");
+        usefulAdjectives.put("compr.*", "Buy");
+        usefulAdjectives.put("vend.*", "Sell");
 
 
         // relations = verbs or set of words with verb
@@ -67,6 +69,7 @@ public class RelationFilter {
         usefulRelations.put("apontar", "said");
         usefulRelations.put("aprovar", "said");
         usefulRelations.put("planear", "said");
+        usefulRelations.put("acreditar", "said");
         usefulRelations.put("projetar", "said");
         usefulRelations.put("servir", "said");
         usefulRelations.put("publicar", "said");
@@ -224,7 +227,10 @@ public class RelationFilter {
 
    public Triple<String,String,String> processRelation (Map<String,String> relevantEntities, String subj, String rel, String pred, TextProcessor tp){
        // infer subject
-       Pair<String,String> p = subjectIsEntity(relevantEntities, subj, tp);
+       Pair<String,String> p = subjectIsEntity(relevantEntities, subj.replace("@","_"), tp);
+       if (p==null){
+           return null;
+       }
        String entitySubject = p.getKey();
        boolean relSubj = subj.toLowerCase().matches("(el(e|a)(s)?)|(est(e|a)(s)?)");
        if (p.getValue().equals("Person")|| relSubj){ // is person
@@ -261,7 +267,7 @@ public class RelationFilter {
    }
 
 
-  /* public Set<Triple<String,String,String>> filterRelevantRelations ( TextProcessor tp, Map<String,String> relevantEntities){
+   public Set<Triple<String,String,String>> filterRelevantRelations ( TextProcessor tp, Map<String,String> relevantEntities){
        Set<Triple<String,String,String>> l2 = new HashSet<>();
        String lastPerson = null;
        if (tp==null|| tp.getRelations().isEmpty()){
@@ -288,7 +294,7 @@ public class RelationFilter {
            }
        }
         return l2;
-   }*/
+   }
 
 
     public Set<Triple<String,String,String>> filterByVerb(TextProcessor tp,  Collection<Triple<String,String,String>> triples){
@@ -416,10 +422,10 @@ public class RelationFilter {
             return l2;
         }
         for (Triple<String,String,String> t : tp.getRelations()){
-            String subj = t.first;
+            String subj = t.first.replaceAll("@","_");
             Pair<String,String> p = subjectIsEntity(relevantEntities, subj, tp);
             if (p!=null){
-                l2.add(t);
+                l2.add(new Triple<>(subj, t.second,t.third));
             }
             else{ // try to see if predicate contains relation
                 Triple<String,String,String> trio = transformInRelationTriple("",t.third,tp);
@@ -451,7 +457,7 @@ public class RelationFilter {
             if(verb.startsWith(word)){
                 continue;
             }
-            else if(verb.endsWith(tp.getLemmaAndTagOfProcessedWord(word).getKey())){
+            else if(tp.getLemmaAndTagOfProcessedWord(word)!=null &&verb.endsWith(tp.getLemmaAndTagOfProcessedWord(word).getKey())){
                 verbFound=true;
             }
             if(!verbFound){
@@ -502,11 +508,6 @@ public class RelationFilter {
                     //TODO uncomment
                 }
             }
-
-
-
-
-
         }
 
         return possibleSubjs;
@@ -550,8 +551,9 @@ public class RelationFilter {
     // returns pairs (real  pred, type)
     public Set<Pair<String,String>> identifyPred ( TextProcessor tp, String sub){
         Set<Pair<String,String>> set = new HashSet<>();
-        for (String word : sub.split(" ")){
+        for (String wd : sub.split(" ")){
             // check if is an useful characteristic or an entity
+            String word = wd.replaceAll("@","_");
             Pair p = tp.getLemmaAndTagOfProcessedWord(word);
             if (p==null){
                 System.out.println("Error identifying pred in word " + word);
@@ -598,6 +600,16 @@ public class RelationFilter {
             retSecond=relationOfVerb;
             //System.out.println("Rel " + retFirst + " <-> " + retSecond);
             if (relationSubjVerbMakesSense(retFirst,retSecond)){
+                if (retSecond.equals("instanceOf")){
+                    Set<String> set = unrollInstance(retFirst,original_Triple.third );
+                    // put in classified entities !
+                    for (String st : set){
+                        entitiesMap.put( st ,subjPair.getKey());
+                        returnSet.add( new Triple<>(subjPair.getKey(),"instanceOf", st));
+                    }
+                   // System.out.println("##Rel unrolled : "+ subjPair.getKey() + " said " + original_Triple.third);
+                    //returnSet.add( new Triple<>(subjPair.getKey(),retSecond, "Statement"));
+                }
 
                 if (retSecond.equals("said")){
                     //System.out.println("##Statement unrolled : "+ subjPair.getKey() + " said " + original_Triple.third);
@@ -696,6 +708,22 @@ public class RelationFilter {
         }
         return returnSet;
     }
+
+
+    public Set<String> unrollInstance(String typeSubj, String pred){
+        Set<String> s = new HashSet<>();
+        for (String word : pred.split(" ")){
+            for (String carac : usefulCaracteristic.keySet()){
+                if (carac.matches(word)){
+                    if (typeSubj.equals(usefulCaracteristic.get(carac))){
+                        s.add(carac);
+                    }
+                }
+            }
+        }
+        return s;
+    }
+
 
 
     // answer  question:  which (Currency, Organization) oneSubj (buyed,traded, ...) ?
@@ -820,6 +848,9 @@ public class RelationFilter {
             else if (relType.equals("saw")){
                 return true;
             }
+            else if (relType.equals("instanceOf")){
+                return true;
+            }
         }
         else if (subjtype.equals("Organization")){
             if (relType.equals("said")){
@@ -840,6 +871,9 @@ public class RelationFilter {
             else if (relType.equals("saw")){
                 return true;
             }
+            else if (relType.equals("instanceOf")){
+                return true;
+            }
         }
         if (subjtype.equals("Currency")){
             if (relType.equals("did")){
@@ -857,6 +891,9 @@ public class RelationFilter {
             else if (relType.equals("saw")){
                 return true;
             }
+            else if (relType.equals("instanceOf")){
+                return true;
+            }
         }
         if (subjtype.equals("Cryptocurrency")){
             if (relType.equals("did")){
@@ -872,6 +909,9 @@ public class RelationFilter {
                 return true;
             }
             else if (relType.equals("saw")){
+                return true;
+            }
+            else if (relType.equals("instanceOf")){
                 return true;
             }
         }
@@ -894,6 +934,9 @@ public class RelationFilter {
             else if (relType.equals("saw")){
                 return true;
             }
+            else if (relType.equals("instanceOf")){
+                return true;
+            }
         }
         if (subjtype.equals("Person")){
             if (relType.equals("said")){
@@ -912,6 +955,9 @@ public class RelationFilter {
                 return true;
             }
             else if (relType.equals("saw")){
+                return true;
+            }
+            else if (relType.equals("instanceOf")){
                 return true;
             }
         }
@@ -943,6 +989,15 @@ public class RelationFilter {
             }
         }
         return false;
+    }
+
+    public String getMatchingAdjective(String possible){
+        for(String st : usefulAdjectives.keySet()){
+            if (possible.matches(st)){
+                return usefulAdjectives.get(st);
+            }
+        }
+        return possible;
     }
 
 

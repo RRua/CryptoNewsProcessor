@@ -162,7 +162,7 @@ public class WikiPediaProcessor implements TextProcessor {
                         continue;
                     }
                     else {
-                        e.printStackTrace();
+                        System.out.println("Error. No match found for word -> " + word);
                     }
                 }
                 //System.out.println(word);
@@ -358,7 +358,7 @@ public class WikiPediaProcessor implements TextProcessor {
                         String s2 = ss[j];
                         if (!s2.contains("_")){
                             Pair<String, String> p2 = getLemmaAndTagOfProcessedWord(s2);
-                            if (p2.getValue().startsWith("V")) {
+                            if (p2!=null&&p2.getValue().startsWith("V")) {
                                 moreVerbs=true;
                                 otherVerb=p2.getKey();
                             }

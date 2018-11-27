@@ -78,36 +78,18 @@ public class Main {
             System.out.println("Error in PoS. Ignoring..");
         }
 
-        int i =0;
-        for (String sentence : sentences.values()) {
-            i++;
-            System.out.println("    Analysing relations in sentence " + i);
-            et = new ExecutorTask(" echo \"" + sentence + "\" | /Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit rel pt ");
-            thread = new Thread(et);
-            thread.start();
-            thread.join();
-            for (String s : et.returnList) {
-                wp.addRelation(s, "\t");
-            }
+        System.out.println("Processing sentences");
+        et = new ExecutorTask(" cat " + newsFile+ " | /Users/ruirua/Documents/PhD_Classes/AIE/work/Linguakit-master/linguakit rel pt ");
+        thread = new Thread(et);
+        thread.start();
+        thread.join();
+        for (String s : et.returnList) {
+            wp.addRelation(s, "\t");
         }
 
         return wp;
     }
 
-
-
-
-   /* public List<String> classifyEntities(List<Pair<String,String>> entitiesList){
-        List<Pair<String>> list = new ArrayList<>();
-        for (Pair<String,String> p : entitiesList){
-            if (p.getValue().equals("Person")){
-                CryptoExtract.Triple t =classifyPerson(((String) p.getKey());
-                list.add(((String) t.first));
-            }
-        }
-
-        return list;
-    }*/
 
 
 
@@ -196,16 +178,65 @@ public class Main {
 
 
 
+    public static Set<Triple<String,String,String>> filterRelations ( RelationFilter rel, TextProcessor np, Map<String,String> classifiedEntities){
+        OntologyMapper om = new OntologyMapper();
 
+        Set<Triple<String,String,String>> s = rel.filterBySubject(np,classifiedEntities);
+        s= rel.filterByVerb(np,s);
+        Map< String , Pair<String,String>>  subjects = new HashMap<>();
+        Map< String , Set<Pair<String,String>>>  preds = new HashMap<>();
+        for(Triple<String,String,String> t : s){
+            Pair p = rel.identifySubject( t.first, np);
+            if (p!=null){
+                subjects.put(t.first, p );
+            }
+            Set se = rel.identifyPred(np  , t.third);
+            if (se.size()>0){
+                preds.put(t.third,se );
+            }
+        }
+        Set<Triple<String,String,String>> usefulRelations = new HashSet<>();
+        for(Triple<String,String,String> t : s){
+             System.out.println("##Possibly Useful triple -> "+ t );
+            if (subjects.containsKey(t.first)&& preds.containsKey(t.third)){
+                Set<Triple<String,String,String>> temporary = rel.classifyTriple(t, subjects.get(t.first), preds.get(t.third), np);
+                for (Triple<String,String,String> te : temporary){
+                    usefulRelations.add(te);
+                    //System.out.println("Triple " + te);
+                    om.prepareSubjectToOntology(new Triple<>(te.first, subjects.get(t.first).getKey(), subjects.get(t.first).getValue()), "de" );
+                    om.preparePredToOntology(t, te, preds.get(t.third), rel);
+                }
+            }
+        }
+        //System.out.println("RESULT: Extracted " + usefulRelations.size() + " triples from " + s.size() + " possible useful triples \n");
+
+        OntologyBridge ob = new OntologyBridge();
+        ob.insertEntityIntoOntology(om.relationsToSend);
+
+        return usefulRelations;
+    }
+
+
+
+    public static void  classifyWithWikipedia( List<String> entitiesToClassify,Map<String,String> classifiedEntities, RelationFilter rel) throws Exception{
+        WikiPediaProcessor[] wa = new WikiPediaProcessor[entitiesToClassify.size()];
+        for (int i = 0; i <entitiesToClassify.size() ; i++) {
+            String entity = entitiesToClassify.get(i);
+            System.out.println("processing " + entity);
+            wa[i] = getWikipediatext(entity);
+            filterRelations(rel, wa[i], classifiedEntities);
+        }
+    }
 
 
     public static void main(String[] args) throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not1-mcafee.txt";
-        String news = "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/5580516263042677579.txt";
-        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not3-Binance.txt";
-        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/not4-vulneravel.txt";
-        //String onto = "/Users/ruirua/Downloads/cryptocurrency-ontologies-owl-REVISION-HEAD/root-ontology.owl";
+        boolean WikiOn = false;
+
+        //String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/examples/not1-mcafee.txt";
+         String news = "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/examples/5580516263042677579.txt";
+        //String news = "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/6623327207871204033#2018-11-26.txt";
+     //   String news= "/Users/ruirua/Documents/PhD_Classes/AIE/work/noticias/examples/not4-vulneravel.txt";
         String onto =null;
         BaseKnowledge base = new BaseKnowledge(onto);
         NewsProcessor np = new NewsProcessor();
@@ -220,72 +251,28 @@ public class Main {
             System.out.println("ENTITY -> " + s.getKey()  + "  " + s.getValue()+ " TYPE -> " + type);
             if (type.equals("Person")|| type.equals("Thing")|| type.equals("Location")){
                 entitiesToClassify.add(s.getKey());
+                if (type.equals("Person")){
+                    classifiedEntities.put(s.getKey(),type);
+                }
             }
             else {
                 classifiedEntities.put(s.getKey(),type);
             }
         }
         np.wordsIndexList.clear();
-        System.out.println(" WIKI processing");
-        WikiPediaProcessor[] wa = new WikiPediaProcessor[entitiesToClassify.size()];
-        /*
-        for (int i = 0; i <entitiesToClassify.size() ; i++) {
-            String entity = entitiesToClassify.get(i);
-            System.out.println("processing " + entity);
-            wa[i] = getWikipediatext(entity);
-            for (Triple<String, String, String> t : wa[i].news_relations_triples){
-                System.out.println(" Wiki triple -> " +t );
-            }
-        }*/
-
         RelationFilter rel = new RelationFilter(base);
         rel.init(classifiedEntities);
-        /*
-        for (WikiPediaProcessor wp : wa){
-            rel.filterRelevantRelations(wp,classifiedEntities);
-        }*/
 
-        OntologyMapper om = new OntologyMapper();
-        Set<Triple<String,String,String>> s = rel.filterBySubject(np,classifiedEntities);
-        s= rel.filterByVerb(np,s);
-        Map< String , Pair<String,String>>  subjects = new HashMap<>();
-        Map< String , Set<Pair<String,String>>>  preds = new HashMap<>();
-        for(Triple<String,String,String> t : s){
-            //System.out.println("relevant triples" + t);
-            Pair p = rel.identifySubject( t.first, np);
-            if (p!=null){
-                subjects.put(t.first, p );
-            }
-            Set se = rel.identifyPred(np  , t.third);
-            if (se.size()>0){
-                preds.put(t.third,se );
-            }
-        }
-        Set<Triple<String,String,String>> usefulRelations = new HashSet<>();
-        for(Triple<String,String,String> t : s){
-           // System.out.println("Possible Useful triple -> "+ t );
-            if (subjects.containsKey(t.first)&& preds.containsKey(t.third)){
-                Set<Triple<String,String,String>> temporary = rel.classifyTriple(t, subjects.get(t.first), preds.get(t.third), np);
-                for (Triple<String,String,String> te : temporary){
-                    usefulRelations.add(te);
-                    System.out.println(" TTTTT " + te);
-                    om.prepareSubjectToOntology(new Triple<>(te.first, subjects.get(t.first).getKey(), subjects.get(t.first).getValue()), "de" );
-                    om.preparePredToOntology(t, te, preds.get(t.third), rel);
-                }
-            }
-        }
+       if (WikiOn){
+           System.out.println(" WIKI processing");
+           classifyWithWikipedia(entitiesToClassify,classifiedEntities,rel);
+       }
 
-        System.out.println("RESULT: Extracted " + usefulRelations.size() + " triples from " + s.size() + " possible useful triples ");
-        OntologyBridge ob = new OntologyBridge();
-        ob.insertEntityIntoOntology(om.relationsToSend);
-
+        Set<Triple<String,String,String>> usefulRelations = filterRelations(rel, np, classifiedEntities);
         for (Triple<String,String,String> tr : usefulRelations){
             System.out.println(" Resultant Triple "+ tr);
         }
-        //System.out.println("Relevant entities:");
-        /*for (String s : rel.entitiesMap.keySet()){
-            System.out.println(s + " -> " + rel.entitiesMap.get(s));
-        }*/
+
         System.out.println(" END " );
     }
 }

@@ -69,6 +69,7 @@ public class OntologyBridge {
 
     public void insertEntityIntoOntology(String entity, String relation , String entityType){
 
+
         entityType=entityType.replaceAll(" ", "_");
         entity=entity.replaceAll(" ", "_");
         RDFConnection conn = RDFConnectionFactory.connect(url);
@@ -79,8 +80,14 @@ public class OntologyBridge {
                 "PREFIX re: <http://www.w3.org/2000/10/swap/reason#>\n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"+
                 "insert {crypto:" + entity +" " + relation + " crypto:" + entityType + " } where {}\n";
-        UpdateRequest request = UpdateFactory.create(batata);
-        conn.update(request);
+        try{
+            UpdateRequest request = UpdateFactory.create(batata.replaceAll("@",""));
+            conn.update(request);
+        }catch (Exception e){
+            UpdateRequest request = UpdateFactory.create(batata.replaceAll("[^\\x00-\\x7F]", "").replaceAll("@","_"));
+            conn.update(request);
+        }
+
         conn.close() ;
 
     }

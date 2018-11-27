@@ -21,13 +21,25 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+            <state relative-caret-position="97">
+              <caret line="199" column="66" lean-forward="true" selection-start-line="199" selection-start-column="66" selection-end-line="199" selection-end-column="66" />
               <folding>
                 <element signature="method#executeCommand#0;class#Main#0" expanded="false" />
                 <element signature="method#getWikipediatext#0;class#Main#0" expanded="false" />
                 <element signature="method#arrayFromFile#0;class#Main#0" expanded="false" />
+                <element signature="method#processNews#0;class#Main#0" expanded="false" />
+                <element signature="method#classifyWithWikipedia#0;class#Main#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CurrencyGazeteer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Utils/Representations/CurrencyGazeteer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="93" column="29" lean-forward="true" selection-start-line="93" selection-start-column="29" selection-end-line="93" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -35,8 +47,8 @@
       <file leaf-file-name="OntologyBridge.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyBridge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state relative-caret-position="-216">
+              <caret line="84" column="33" lean-forward="true" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -45,8 +57,8 @@
       <file leaf-file-name="RelationFilter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="947" column="0" lean-forward="false" selection-start-line="947" selection-start-column="0" selection-end-line="947" selection-end-column="0" />
+            <state relative-caret-position="-412">
+              <caret line="71" column="38" lean-forward="false" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
               <folding>
                 <element signature="method#relationSubjVerbMakesSense#0;class#RelationFilter#0" expanded="false" />
               </folding>
@@ -54,31 +66,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TextProcessor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/TextProcessor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="18" column="23" lean-forward="true" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PoSTriple.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/PoSTriple.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="OntologyMapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyMapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="179" column="19" lean-forward="false" selection-start-line="179" selection-start-column="19" selection-end-line="179" selection-end-column="19" />
+            <state relative-caret-position="1447">
+              <caret line="184" column="90" lean-forward="false" selection-start-line="184" selection-start-column="80" selection-end-line="184" selection-end-column="90" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -101,8 +93,8 @@
       <file leaf-file-name="BaseKnowledge.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/BaseKnowledge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="49" column="42" lean-forward="false" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
+            <state relative-caret-position="158">
+              <caret line="174" column="23" lean-forward="false" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -111,8 +103,8 @@
       <file leaf-file-name="NewsProcessor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/NewsProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="573">
-              <caret line="520" column="52" lean-forward="false" selection-start-line="520" selection-start-column="52" selection-end-line="520" selection-end-column="52" />
+            <state relative-caret-position="-293">
+              <caret line="207" column="36" lean-forward="false" selection-start-line="207" selection-start-column="36" selection-end-line="207" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -121,8 +113,8 @@
       <file leaf-file-name="WikiPediaProcessor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/WikiPediaProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="416" column="5" lean-forward="false" selection-start-line="416" selection-start-column="5" selection-end-line="416" selection-end-column="5" />
+            <state relative-caret-position="232">
+              <caret line="164" column="88" lean-forward="false" selection-start-line="164" selection-start-column="88" selection-end-line="164" selection-end-column="88" />
               <folding />
             </state>
           </provider>
@@ -139,25 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>verbo</find>
-      <find>byve</find>
-      <find>wordsto</find>
-      <find>replaceall</find>
-      <find>replace</find>
-      <find>dil</find>
-      <find>filterb</find>
-      <find>subjec</find>
-      <find>identifysu</find>
-      <find>ident</find>
-      <find>filterbyve</find>
-      <find>getlem</find>
-      <find>filter</find>
-      <find>ulha</find>
-      <find>rele</find>
-      <find>subje</find>
-      <find>predi</find>
-      <find>compr</find>
-      <find>cok</find>
       <find>estar</find>
       <find>verb</find>
       <find>Action</find>
@@ -166,9 +139,28 @@
       <find>getse</find>
       <find>inferi</find>
       <find>getver</find>
-      <find>sentence</find>
-      <find>byver</find>
       <find>owf</find>
+      <find>instanceof</find>
+      <find>byver</find>
+      <find>filterre</find>
+      <find>@</find>
+      <find>instance</find>
+      <find>makes</find>
+      <find>instan</find>
+      <find>getMatchingAdjective</find>
+      <find>usefulcara</find>
+      <find>occup</find>
+      <find>sentence</find>
+      <find>occ</find>
+      <find>sub</find>
+      <find>owl</find>
+      <find>x</find>
+      <find>identifyin</find>
+      <find>anal</find>
+      <find>replace</find>
+      <find>replacea</find>
+      <find>result</find>
+      <find>replaceall</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -185,19 +177,19 @@
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/PoSTriple.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/FusekiExample.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/TextProcessor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/Triple.java" />
+        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/BaseKnowledge.java" />
+        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/WikiPediaProcessor.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/NewsProcessor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/BaseKnowledge.java" />
-        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/Triple.java" />
-        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyBridge.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyMapper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyBridge.java" />
         <option value="$PROJECT_DIR$/src/main/java/CryptoExtract/Main.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="714" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -704,8 +696,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -715,7 +706,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3470375" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3337364" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38331318" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -754,10 +745,10 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3337364" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34945586" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27539343" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27539343" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -770,12 +761,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
-          <line>226</line>
-          <properties />
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyMapper.java</url>
           <line>118</line>
           <properties />
@@ -783,24 +768,30 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
-          <line>780</line>
+          <line>808</line>
           <properties />
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
-          <line>590</line>
-          <properties />
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
-          <line>618</line>
+          <line>630</line>
           <properties />
           <option name="timeStamp" value="59" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
+          <line>609</line>
+          <properties />
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java</url>
+          <line>602</line>
+          <properties />
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="62" />
+      <option name="time" value="71" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -813,6 +804,8 @@
             <element signature="method#executeCommand#0;class#Main#0" expanded="false" />
             <element signature="method#getWikipediatext#0;class#Main#0" expanded="false" />
             <element signature="method#arrayFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#processNews#0;class#Main#0" expanded="false" />
+            <element signature="method#classifyWithWikipedia#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -900,6 +893,8 @@
             <element signature="method#executeCommand#0;class#Main#0" expanded="false" />
             <element signature="method#getWikipediatext#0;class#Main#0" expanded="false" />
             <element signature="method#arrayFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#processNews#0;class#Main#0" expanded="false" />
+            <element signature="method#classifyWithWikipedia#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -989,6 +984,8 @@
             <element signature="method#executeCommand#0;class#Main#0" expanded="false" />
             <element signature="method#getWikipediatext#0;class#Main#0" expanded="false" />
             <element signature="method#arrayFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#processNews#0;class#Main#0" expanded="false" />
+            <element signature="method#classifyWithWikipedia#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1027,14 +1024,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Utils/CoinMarketCapBridge.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Utils/Contraction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1063,13 +1052,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Utils/Representations/CurrencyGazeteer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1117,14 +1099,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/FusekiExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="64" column="22" lean-forward="false" selection-start-line="64" selection-start-column="22" selection-end-line="64" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -1141,34 +1115,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/WikiPediaProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="416" column="5" lean-forward="false" selection-start-line="416" selection-start-column="5" selection-end-line="416" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/TextProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="18" column="23" lean-forward="true" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/NewsProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="520" column="52" lean-forward="false" selection-start-line="520" selection-start-column="52" selection-end-line="520" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/BaseKnowledge.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="49" column="42" lean-forward="false" selection-start-line="49" selection-start-column="42" selection-end-line="49" selection-end-column="42" />
           <folding />
         </state>
       </provider>
@@ -1183,18 +1133,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyBridge.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/FusekiExample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state relative-caret-position="422">
+          <caret line="47" column="0" lean-forward="true" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/BaseKnowledge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="174" column="23" lean-forward="false" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Utils/CoinMarketCapBridge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Utils/Representations/CurrencyGazeteer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="93" column="29" lean-forward="true" selection-start-line="93" selection-start-column="29" selection-end-line="93" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/WikiPediaProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="164" column="88" lean-forward="false" selection-start-line="164" selection-start-column="88" selection-end-line="164" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/NewsProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-293">
+          <caret line="207" column="36" lean-forward="false" selection-start-line="207" selection-start-column="36" selection-end-line="207" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/RelationFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="947" column="0" lean-forward="false" selection-start-line="947" selection-start-column="0" selection-end-line="947" selection-end-column="0" />
+        <state relative-caret-position="-412">
+          <caret line="71" column="38" lean-forward="false" selection-start-line="71" selection-start-column="38" selection-end-line="71" selection-end-column="38" />
           <folding>
             <element signature="method#relationSubjVerbMakesSense#0;class#RelationFilter#0" expanded="false" />
           </folding>
@@ -1203,22 +1193,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyMapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="179" column="19" lean-forward="false" selection-start-line="179" selection-start-column="19" selection-end-line="179" selection-end-column="19" />
+        <state relative-caret-position="1447">
+          <caret line="184" column="90" lean-forward="false" selection-start-line="184" selection-start-column="80" selection-end-line="184" selection-end-column="90" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/OntologyBridge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216">
+          <caret line="84" column="33" lean-forward="true" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/CryptoExtract/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+        <state relative-caret-position="97">
+          <caret line="199" column="66" lean-forward="true" selection-start-line="199" selection-start-column="66" selection-end-line="199" selection-end-column="66" />
           <folding>
             <element signature="method#executeCommand#0;class#Main#0" expanded="false" />
             <element signature="method#getWikipediatext#0;class#Main#0" expanded="false" />
             <element signature="method#arrayFromFile#0;class#Main#0" expanded="false" />
+            <element signature="method#processNews#0;class#Main#0" expanded="false" />
+            <element signature="method#classifyWithWikipedia#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>

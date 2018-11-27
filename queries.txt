@@ -1,0 +1,34 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crypto: <http://www.semanticweb.org/ruirua/ontologies/CryptoExtract#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+
+#delete  { ?q ?x ?z } where {?q ?x ?z}
+
+select distinct *{ ?q ?x ?z }
+
+#quem disse algo ?
+#select  * { ?who rdf:said ?said . ?said rdf:type crypto:Statement   }
+
+# quem disse algo sobre btc?
+#select  * { ?who rdf:said ?said . ?said rdf:type crypto:Statement . ?said owl:relatedTo crypto:BTC }
+
+# quem disse algo sobre hashrate?
+#select  * { ?who rdf:said ?said . ?said rdf:type crypto:Statement . ?said owl:relatedTo crypto:hashrate }
+
+# o que disse um analista ?
+#select  * { ?x rdf:type crypto:Analyst . ?x rdf:said ?said . ?said rdf:type crypto:Statement  }
+
+# quem comprou bitcoin?
+#select  * { ?x owl:comprar crypto:Bitcoin  }
+
+# que moedas subiram de preço?
+#select  * { ?x owl:subir crypto:preço }
+
+#insert data { crypto:X rdf:type crypto:X . crypto:Z owl:w crypto:q }
+
+
+
+

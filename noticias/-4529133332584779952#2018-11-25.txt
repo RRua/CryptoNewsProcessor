@@ -1,7 +1,0 @@
- Segundo o artigo publicado pela agência de notícias 
- Cointelegraph
- , a Universidade de Tóquio lançará um curso de blockchain após ter recebido uma doação de quase US$800 mil de várias empresas, incluindo o gigante banco japonês Banking Sumitomo Mitsui (SMBC) e a Fundação Ethereum.
- Em um comunicado de imprensa divulgado nesta terça-feira, 20 de novembro, o SMBC lista mais cinco colaboradores, além de si e da Fundação Ethereum, que contribuíram para a doação: Good Luck 3, JSS, Zipper, Hotto link, and Money Forward. O grupo bancário não divulga os detalhes da doação de 90 milhões de ienes, nem revelou o principal contribuinte.
- De acordo com o comunicado, o curso, apelidado de “Curso de inovação de doação com blockchain”, na faculdade de engenharia da Universidade de Tóquio terá duração de três anos: se começado em 1º de novembro de 2018, será finalizado até 31 de outubro de 2021
- O curso foi desenvolvido para estudantes que pretendem tornar-se empreendedores relacionados à tecnologia blockchain. É focado no desenvolvimento de soluções descentralizadas, sua implementação social e recursos humanos. O módulo combinará palestras e práticas, como o estabelecimento de um serviço de tecnologias de informação e comunicação (ICT) ou o desenvolvimento de um modelo de negócios baseado em blockchain.
-

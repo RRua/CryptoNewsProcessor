@@ -204,10 +204,15 @@ public class NewsProcessor implements TextProcessor {
                     for (String st : wordsIndexList.keySet()){
                         if (st.matches((word.substring(0, (word.length()>2? word.length()-2 : 2))))){
                             // is a candidate
-                            t =  wordsIndexList.get(st).pollFirst();
-                            if (isNear(((Integer) t.first), ((Integer) t.second),((Integer) pair.getKey()), ((Integer) pair.getValue()))){
-                                break;
+                            try {
+                                t =  wordsIndexList.get(st).pollFirst();
+                                if (isNear(((Integer) t.first), ((Integer) t.second),((Integer) pair.getKey()), ((Integer) pair.getValue()))){
+                                    break;
+                                }
+                            }catch (Exception ex){
+                                System.out.println("Error in word ->" + word);
                             }
+
                         }
                     }
                     if (t==null){

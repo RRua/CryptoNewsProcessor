@@ -47,7 +47,11 @@ def search_Wikipedia(original_object,search_object):
 			return ""
 		else:
 			if len(x)>1:
-				page=wikipedia.page(returnMostCommon(original_object,x))
+				try:
+					page=wikipedia.page(returnMostCommon(original_object,x))
+				except wikipedia.DisambiguationError as e:
+					s = random.choice(e.options)
+					search_Wikipedia(original_object,s)
 			else:
 				try:
 					page = wikipedia.page(x[0])

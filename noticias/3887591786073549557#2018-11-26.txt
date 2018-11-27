@@ -1,0 +1,19 @@
+ Após a tensão envolvendo o controverso hard fork do Bitcoin Cash (BCH), a fabricante de carteiras físicas (cold wallet) Ledger anunciou o retorno do suporte à criptomoeda em seus dispositivos.
+ No início de novembro, a Ledger anunciou que os serviços com BCH seriam 
+ suspensos
+  em 15 de novembro e retomados apenas após a conclusão do processo de divisão da rede.
+ “A Ledger suspenderá o serviço de Bitcoin Cash até que fique claro qual das cadeias será a dominante, técnica e economicamente. A razão para fechar o serviço durante este tempo é evitar transações indesejadas (resultantes de “ataques de repetição”), causando possível perda de fundos e outros possíveis problemas com o Bitcoin Cash durante este período. Dependendo do resultado da divisão, comunicaremos nosso próximo passo quando tivermos uma visão mais clara de seu resultado”, afirmou a Ledger, em 02 de novembro.
+ No dia 23 deste mês, a Ledger liberou um 
+ comunicado
+  no qual anunciou a retomada do suporte ao BCH. Além da retomada do serviço com BCH, a empresa também liberou um 
+ tutorial
+  para ensinar os usuários a reivindicarem seus Bitcoin Cash SV (BCHSV).
+ A Ledger ressaltou em seu 
+ Twitter
+  que o BCH volta como Bitcoin Cash ABC (BCHABC). Além disso, ela também afirmou que ensinará aos usuários como receber os tokens BCHSV, oriundos do fork realizado em 15 de novembro.
+ “Nosso serviço de Bitcoin Cash está de volta online na forma do Bitcoin Cash ABC. Também estamos fornecendo um artigo na Central de Atendimento explicando como reivindicar seu Bitcoin Cash SV. Recomenda-se fazer isso antes de enviar o Bitcoin Cash”, afirmou a empresa em seu tuíte.
+ No entanto, a empresa observou que, a partir de agora, o BCH SV não será suportado na 
+ Ledger Live
+ , seu serviço de gerenciamento de contas. A empresa recomendou aos seus clientes que usassem a ferramenta de divisão Electron Splash antes de fazer qualquer transação com BCH. Caso contrário, os usuários podem se arriscar a perder os SVs do BCH se um invasor repetir a transação na cadeia SV do BCH ou vice-versa.
+ Criado em agosto do ano passado como resultado de um hard fork na rede do Bitcoin (BTC), o BCH passou por mais um fork em 15 de novembro. O processo foi o ponto máximo de uma batalha complexa entre duas visões: a do BCH ABC, apoiado por Roger Ver, e o BCH SV, liderado por Craig Wright (que se autodenomina o “verdadeiro Satoshi Nakamoto”). A guerra de hash levou tanto a Ledger quanto exchanges ao redor do mundo a suspenderem temporariamente as negociações e retiradas de BCH.
+

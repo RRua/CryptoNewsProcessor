@@ -56,10 +56,6 @@ public class BaseKnowledge {
         cache.put("ataque".toLowerCase(),"Issue");
         cache.put("falha".toLowerCase(),"Issue");
         cache.put("invasor".toLowerCase(),"Issue");
-        cache.put("programador".toLowerCase(),"Occupation");
-        cache.put("hacker".toLowerCase(),"Occupation");
-        cache.put("CEO".toLowerCase(),"Occupation");
-        cache.put("presidente".toLowerCase(),"Occupation");
         cache.put("Binance".toLowerCase(),"Organization");
         cache.put("P2P".toLowerCase(),"Cryptocurrency");
         cache.put("etoro".toLowerCase(),"Organization");
@@ -171,6 +167,9 @@ public class BaseKnowledge {
     }
 
     public boolean isType(String possibleType){
+        if (possibleType==null){
+            return false;
+        }
         for(String s : consideredTypes){
             if (s.toLowerCase().equals(possibleType.toLowerCase())){
                 return true;
